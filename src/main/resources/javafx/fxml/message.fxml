@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<HBox fx:id="fullMessageBox" nodeOrientation="LEFT_TO_RIGHT" stylesheets="@../css/message.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.itzstonlex.desktop.itzmsg.type.message.MessageForm">
+   <children>
+      <ImageView fx:id="senderAvatar" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar">
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" />
+         </HBox.margin>
+         <image>
+            <Image url="@../../img/avatar/assistent.png" />
+         </image>
+      </ImageView>
+      <VBox fx:id="messageBox" maxWidth="350.0" minHeight="50.0" minWidth="50.0" nodeOrientation="LEFT_TO_RIGHT" spacing="7.0" styleClass="messagebox">
+         <children>
+            <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="TOP" lineSpacing="4.0" nodeOrientation="LEFT_TO_RIGHT" text="The example test message" textOverrun="CLIP" wrapText="true">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+            <HBox spacing="5.0">
+               <children>
+                  <Label fx:id="timeLabel" contentDisplay="RIGHT" text="12:43" textFill="#909090" />
+                  <Label fx:id="copyActionLabel" text="Copy" textFill="#000fff" underline="true">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <Label fx:id="deleteActionLabel" text="Delete" textFill="#e80000" underline="true">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="15.0" right="15.0" top="10.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+   </children>
+</HBox>

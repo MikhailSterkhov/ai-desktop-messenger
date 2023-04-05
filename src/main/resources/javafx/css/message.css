@@ -1,0 +1,13 @@
+.messagebox {
+  -fx-background-color: #eaeaea;
+  -fx-background-radius: 5px 24px 24px 24px;
+  -fx-border-color: rgba(0, 0, 0, 0.75);
+  -fx-border-radius: 3px 24px 24px 24px;
+  -fx-font-family: 'Arial';
+  -fx-font-size: 8px;
+}
+
+.avatar {
+  -fx-border-color: red;
+  -fx-border-radius: 50%;
+}

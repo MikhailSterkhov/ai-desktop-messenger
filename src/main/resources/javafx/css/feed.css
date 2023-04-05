@@ -1,0 +1,75 @@
+.wallpaper {
+  -fx-background-image: url('../../img/wallpaper/wallpaper_dialog.jpg');
+}
+
+.scroll-pane,
+.scroll-pane .viewport {
+  -fx-background-color: transparent;
+}
+
+.bot_header {
+  -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(255, 255, 255, 0.15), transparent, rgba(255, 255, 255, 0.25));
+  -fx-background-radius: 42px;
+  -fx-border-color: rgba(255, 255, 255, 0.5);
+  -fx-border-radius: 40px;
+  -fx-font-size: 15px;
+  -fx-font-family: 'Arial';
+}
+
+.bot_header .button {
+  -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(0, 147, 130, 0.15), rgba(157, 0, 150, 0.15));
+  -fx-background-radius: 25px 10px 25px 10px;
+  -fx-text-fill: #ffffff;
+  -fx-font-size: 16px;
+  -fx-border-color: rgba(255, 255, 255, 0.7);
+  -fx-border-radius: 25px 10px 25px 10px;
+}
+
+.user_request_background {
+  -fx-background-color: linear-gradient(from 100% 100% to 10% 15%, rgba(255, 255, 255, 0.02), transparent, rgba(255, 255, 255, 0.05));
+  -fx-border-color: rgba(255, 255, 255, 0.1);
+}
+
+.user_request_field {
+  -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(255, 255, 255, 0.15), transparent);
+  -fx-background-radius: 25px;
+  -fx-text-fill: #ffffff;
+  -fx-font-size: 16px;
+  -fx-border-color: rgba(255, 255, 255, 0.1);
+  -fx-border-radius: 25px;
+  -fx-padding: 12px 123px 12px 14px;
+  -fx-pref-column-count: 12;
+}
+
+.button_request_send {
+  -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, transparent, rgba(255, 255, 255, 0.15));
+  -fx-background-radius: 25px;
+  -fx-text-fill: #ffffff;
+  -fx-font-size: 16px;
+  -fx-border-color: rgba(255, 255, 255, 0.65);
+  -fx-border-radius: 25px;
+}
+
+.first_message_annotation {
+  -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, transparent, rgba(255, 255, 255, 0.1), transparent);
+  -fx-background-radius: 25px;
+  -fx-border-color: rgba(255, 255, 255, 0.4);
+  -fx-border-radius: 25px;
+  -fx-font-size: 18px;
+  -fx-font-family: 'Arial';
+}
+
+.scroll-pane {
+  -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical{
+  -fx-background-color:transparent;
+}
+
+.scroll-bar:vertical .thumb {
+  -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  -fx-background-radius: 25px;
+  -fx-border-color: rgba(255, 255, 255, 0.4);
+  -fx-border-radius: 25px;
+}

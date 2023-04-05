@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" styleClass="wallpaper" stylesheets="@../css/loading.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.itzstonlex.desktop.itzmsg.loading.LoadingJavaFXController">
+   <children>
+      <AnchorPane layoutX="170.0" layoutY="92.0" prefHeight="411.0" prefWidth="760.0" styleClass="debugging" stylesheets="@../css/loading.css">
+         <children>
+            <VBox prefHeight="518.0" prefWidth="760.0">
+               <children>
+                  <AnchorPane prefHeight="225.0" prefWidth="764.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="3.0" layoutY="6.0" prefHeight="70.0" prefWidth="760.0" text="CHATBOT MESSENGER" wrapText="true">
+                           <font>
+                              <Font name="Arial Bold" size="31.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutX="3.0" layoutY="184.0" prefHeight="9.0" prefWidth="760.0" />
+                        <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="95.0" prefHeight="58.0" prefWidth="760.0" text="This application uses third-party public libraries, at the time &#10;of its writing they were not copyrighted, so the use of integrated &#10;software is fully legal" textAlignment="CENTER" textFill="#b5b5b5" wrapText="true">
+                           <font>
+                              <Font name="Arial Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <Separator layoutX="285.0" layoutY="72.0" prefHeight="9.0" prefWidth="195.0" />
+                     </children>
+                  </AnchorPane>
+                  <ProgressIndicator prefHeight="100.0" prefWidth="760.0" styleClass="progress-bar">
+                     <effect>
+                        <Glow level="1.0" />
+                     </effect>
+                  </ProgressIndicator>
+                  <Label alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="46.0" prefWidth="760.0" text="Загрузка данных" textAlignment="CENTER" textFill="#8d8d8d">
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                  </Label>
+                  <Separator prefHeight="61.0" prefWidth="764.0" />
+                  <Label fx:id="descriptionOfLoading" alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="134.0" prefWidth="760.0" textAlignment="CENTER" textFill="#575757" wrapText="true">
+                     <font>
+                        <Font name="Arial" size="18.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="760.0" text="Created by @itzstonlex" textFill="#b5b5b5" />
+               </children>
+            </VBox>
+         </children>
+         <effect>
+            <DropShadow height="81.72" radius="83.68" spread="0.31" width="255.0" />
+         </effect>
+      </AnchorPane>
+   </children>
+</AnchorPane>

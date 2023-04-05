@@ -1,0 +1,11 @@
+.debugging {
+  -fx-border-color: linear-gradient(from 25% 25% to 100% 100%, rgba(20, 220, 197, 0.5), rgba(238, 35, 228, 0.5));
+  -fx-border-width: 5px;
+  -fx-border-radius: 50px;
+  -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #ffffff, #d5d5d5);
+  -fx-background-radius: 52px;
+}
+
+.wallpaper {
+  -fx-background-image: url('../../img/wallpaper/wallpaper_loading.jpg');
+}
