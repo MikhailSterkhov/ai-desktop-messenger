@@ -7,8 +7,7 @@ public interface ChatBotConversationKeys {
   String INTERVIEWER_PSEUDONYM = "Pseudonym";
 
   // Topics.
-  String CONVERSATION_TOPIC = "AllTopics";
-
+  String ALL_TOPICS = "Topics";
   String LAST_TOPIC = "LastTopic";
   String FIRST_TOPIC = "FirstTopic";
 }
