@@ -32,5 +32,22 @@
       <version>1.18.24</version>
       <scope>provided</scope>
     </dependency>
+
+    <!--ItzStonlex GitHub Dependencies-->
+    <dependency>
+      <groupId>com.github.itzstonlex</groupId>
+      <artifactId>plano-framework</artifactId>
+      <version>latest</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/libraries/plano-framework.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.github.itzstonlex</groupId>
+      <artifactId>rest-framework</artifactId>
+      <version>latest</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/libraries/rest-framework.jar</systemPath>
+    </dependency>
+
   </dependencies>
 </project>
