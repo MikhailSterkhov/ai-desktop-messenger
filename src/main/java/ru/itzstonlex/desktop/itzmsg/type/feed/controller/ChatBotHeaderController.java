@@ -4,9 +4,9 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import lombok.NonNull;
-import ru.itzstonlex.desktop.itzmsg.form.FormComponentsMap;
+import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.subaction.ControllerSubActionStorage;
+import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 
 public final class ChatBotHeaderController extends AbstractComponentController {
 
@@ -15,15 +15,14 @@ public final class ChatBotHeaderController extends AbstractComponentController {
 
   private Label username, userstatus;
 
-  @Override
-  protected ControllerSubActionStorage<?> getSubActionsStorage() {
-    return null;
+  public ChatBotHeaderController(AbstractSceneForm form) {
+    super(form);
   }
 
   @Override
-  protected void initNodes(@NonNull FormComponentsMap map) {
-    username = map.getNode(USER_NAME);
-    userstatus = map.getNode(USER_STATUS);
+  protected void initNodes(@NonNull ControllerConfiguration configuration) {
+    username = configuration.getNode(USER_NAME);
+    userstatus = configuration.getNode(USER_STATUS);
   }
 
   @Override

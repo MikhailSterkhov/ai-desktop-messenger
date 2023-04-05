@@ -8,12 +8,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import ru.itzstonlex.desktop.itzmsg.form.SceneViewTable;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 import ru.itzstonlex.desktop.itzmsg.loading.LoadingJavaFXController;
 
 public class ApplicationStarter extends Application {
 
-  private static final String LOADPAGE_PATH = (File.separator + SceneViewTable.VIEW_FORMS_PATH + "loadpage.fxml");
+  private static final String LOADPAGE_PATH = (File.separator + FormKeys.VIEW_FORMS_PATH + "loadpage.fxml");
 
   private static final String APP_TITLE = "Messenger by @itzstonlex";
 

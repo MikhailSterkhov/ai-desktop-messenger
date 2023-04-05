@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.form;
+package ru.itzstonlex.desktop.itzmsg.form.controller;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.Map;
 import javafx.scene.Node;
 import lombok.NonNull;
 
-public final class FormComponentsMap {
+public final class ControllerConfiguration {
 
   private final Map<String, Node> handlingNodesMap = new HashMap<>();
 

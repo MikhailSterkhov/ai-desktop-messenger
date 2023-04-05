@@ -1,13 +1,15 @@
 package ru.itzstonlex.desktop.itzmsg.chatbot.conversation.usecase;
 
-public interface ChatBotConversationKeys {
+import ru.itzstonlex.desktop.itzmsg.usecase.IUsecaseKeysStorage;
+
+public interface ChatBotConversationKeys extends IUsecaseKeysStorage {
 
   // Interviewer params.
-  String INTERVIEWER_NAME = "Name";
-  String INTERVIEWER_PSEUDONYM = "Pseudonym";
+  Key INTERVIEWER_NAME = new Key("INTERVIEWER_NAME");
+  Key INTERVIEWER_PSEUDONYM = new Key("INTERVIEWER_PSEUDONYMv");
 
   // Topics.
-  String ALL_TOPICS = "Topics";
-  String LAST_TOPIC = "LastTopic";
-  String FIRST_TOPIC = "FirstTopic";
+  Key ALL_TOPICS = new Key("ALL_TOPICS");
+  Key LAST_TOPIC = new Key("LAST_TOPIC");
+  Key FIRST_TOPIC = new Key("FIRST_TOPIC");
 }

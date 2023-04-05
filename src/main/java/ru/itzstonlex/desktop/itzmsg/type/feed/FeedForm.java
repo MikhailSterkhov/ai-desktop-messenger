@@ -7,12 +7,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import ru.itzstonlex.desktop.itzmsg.chatbot.ChatBotAssistant;
+import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController;
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.BothMessagesReceiveController;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.SceneViewTable;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecaseKeys;
+import ru.itzstonlex.desktop.itzmsg.type.feed.function.FeedFormFunctionReleaser;
 
 public final class FeedForm extends AbstractSceneForm {
 
@@ -44,26 +46,31 @@ public final class FeedForm extends AbstractSceneForm {
   private AnchorPane firstMessageAnnotationPanel;
 
   public FeedForm() {
-    super(SceneViewTable.FEED);
+    super(FormKeys.FEED);
+  }
+
+  @Override
+  public FormFunctionReleaser<?> newFunctionReleaser() {
+    return new FeedFormFunctionReleaser();
   }
 
   @Override
   public void initializeUsecase(FormUsecase usecase) {
-    usecase.set(FormUsecaseKeys.FRAME_RESIZABLE_DISABLE, true);
+    usecase.set(FormUsecaseKeys.FRAME_RESIZABLE_DISABLE_FLAG, true);
 
-    usecase.set(FormUsecaseKeys.SCENE_WIDTH, WIDTH_CONST);
-    usecase.set(FormUsecaseKeys.SCENE_HEIGHT, HEIGHT_CONST);
+    usecase.set(FormUsecaseKeys.CUSTOM_WIDTH, WIDTH_CONST);
+    usecase.set(FormUsecaseKeys.CUSTOM_HEIGHT, HEIGHT_CONST);
   }
 
   @Override
   public void initializeControllers() {
     ChatBotAssistant chatBotAssistant = new ChatBotAssistant();
 
-    ChatBotHeaderController botUserController = new ChatBotHeaderController();
+    ChatBotHeaderController botUserController = new ChatBotHeaderController(this);
     botUserController.with(ChatBotHeaderController.USER_NAME, username)
         .with(ChatBotHeaderController.USER_STATUS, userStatus);
 
-    BothMessagesReceiveController messagesController = new BothMessagesReceiveController(botUserController, chatBotAssistant, this);
+    BothMessagesReceiveController messagesController = new BothMessagesReceiveController(this, chatBotAssistant);
     messagesController.with(BothMessagesReceiveController.MESSAGE_FIELD, messageField)
             .with(BothMessagesReceiveController.MESSAGES_BOX, messagesBox)
             .with(BothMessagesReceiveController.SEND_BUTTON, sendButton)

@@ -2,9 +2,10 @@ package ru.itzstonlex.desktop.itzmsg.type.message.controller;
 
 import javafx.scene.control.Label;
 import lombok.NonNull;
-import ru.itzstonlex.desktop.itzmsg.form.FormComponentsMap;
+import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
+import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.subaction.ControllerSubActionStorage;
+import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 
 public final class MessageTextController extends AbstractComponentController {
 
@@ -13,14 +14,13 @@ public final class MessageTextController extends AbstractComponentController {
 
   private Label label;
 
-  @Override
-  protected ControllerSubActionStorage<?> getSubActionsStorage() {
-    return null;
+  public MessageTextController(AbstractSceneForm form) {
+    super(form);
   }
 
   @Override
-  protected void initNodes(@NonNull FormComponentsMap map) {
-    label = map.getNode(NAME);
+  protected void initNodes(@NonNull ControllerConfiguration configuration) {
+    label = configuration.getNode(NAME);
   }
 
   @Override

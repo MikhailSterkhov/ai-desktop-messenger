@@ -3,7 +3,6 @@ package ru.itzstonlex.desktop.itzmsg.type.message;
 import javafx.fxml.FXML;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -11,19 +10,21 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.SceneViewTable;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.itzmsg.type.message.controller.CopyActionLabelController;
 import ru.itzstonlex.desktop.itzmsg.type.message.controller.DeleteActionLabelController;
 import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTextController;
 import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTimeController;
+import ru.itzstonlex.desktop.itzmsg.type.message.subaction.MessageFormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.utility.ImageViewUtils;
 import ru.itzstonlex.desktop.itzmsg.utility.ImageViewUtils.AvatarType;
 
 public final class MessageForm extends AbstractSceneForm {
 
-  private final MessageTimeController messageTimeController = new MessageTimeController();
-  private final MessageTextController messageTextController = new MessageTextController();
+  private MessageTimeController messageTimeController;
+  private MessageTextController messageTextController;
 
   @FXML
   private Label copyActionLabel;
@@ -47,7 +48,12 @@ public final class MessageForm extends AbstractSceneForm {
   private ImageView senderAvatar;
 
   public MessageForm() {
-    super(SceneViewTable.MESSAGE);
+    super(FormKeys.MESSAGE);
+  }
+
+  @Override
+  public FormFunctionReleaser<?> newFunctionReleaser() {
+    return new MessageFormFunctionReleaser();
   }
 
   @Override
@@ -57,16 +63,19 @@ public final class MessageForm extends AbstractSceneForm {
 
   @Override
   public void initializeControllers() {
-    addController(new CopyActionLabelController()
-        .with(CopyActionLabelController.NAME, copyActionLabel)
-        .with(CopyActionLabelController.MESSAGE_TEXT, messageLabel));
-
-    addController(new DeleteActionLabelController()
-        .with(DeleteActionLabelController.NAME, deleteActionLabel)
-        .with(DeleteActionLabelController.MESSAGE_TEXT, messageLabel));
+    messageTimeController = new MessageTimeController(this);
+    messageTextController = new MessageTextController(this);
 
     addController(messageTimeController.with(MessageTimeController.NAME, timeLabel));
     addController(messageTextController.with(MessageTextController.NAME, messageLabel));
+
+    addController(new CopyActionLabelController(this)
+        .with(CopyActionLabelController.NAME, copyActionLabel)
+        .with(CopyActionLabelController.MESSAGE_TEXT, messageLabel));
+
+    addController(new DeleteActionLabelController(this)
+        .with(DeleteActionLabelController.NAME, deleteActionLabel)
+        .with(DeleteActionLabelController.MESSAGE_TEXT, messageLabel));
   }
 
   public void updateMessageText(@NonNull SenderType senderType, @NonNull String newText) {

@@ -3,15 +3,16 @@ package ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import lombok.NonNull;
-import ru.itzstonlex.desktop.itzmsg.form.SceneViewTable;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.controller.observer.event.AbstractMouseClickedObserver;
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.BothMessagesReceiveController;
 
 public class FooterButtonSendClickObserver extends AbstractMouseClickedObserver<BothMessagesReceiveController> {
 
   @Override
-  public SceneViewTable.Entry getView() {
-    return SceneViewTable.FEED;
+  public FormKeys.FormKey getView() {
+    return FormKeys.FEED;
   }
 
   @Override
@@ -22,7 +23,9 @@ public class FooterButtonSendClickObserver extends AbstractMouseClickedObserver<
   @Override
   public void observe(@NonNull MouseEvent event) {
     BothMessagesReceiveController controller = getController();
-    TextField component = controller.getFormComponentsMap().getNode(BothMessagesReceiveController.MESSAGE_FIELD);
+
+    TextField component = controller.getConfiguration()
+        .getNode(BothMessagesReceiveController.MESSAGE_FIELD);
 
     System.out.println("Observe SendButtonObserverMouseClicked.");
 

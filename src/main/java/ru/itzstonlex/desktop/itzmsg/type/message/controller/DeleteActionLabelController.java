@@ -7,9 +7,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import lombok.NonNull;
-import ru.itzstonlex.desktop.itzmsg.form.FormComponentsMap;
+import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
+import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.subaction.ControllerSubActionStorage;
+import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 
 public final class DeleteActionLabelController extends AbstractComponentController {
 
@@ -22,15 +23,14 @@ public final class DeleteActionLabelController extends AbstractComponentControll
   private String backupMessageText;
   private Font backupMessageFont;
 
-  @Override
-  protected ControllerSubActionStorage<?> getSubActionsStorage() {
-    return null;
+  public DeleteActionLabelController(AbstractSceneForm form) {
+    super(form);
   }
 
   @Override
-  protected void initNodes(@NonNull FormComponentsMap map) {
-    actionLabel = map.getNode(NAME);
-    messageLabel = map.getNode(MESSAGE_TEXT);
+  protected void initNodes(@NonNull ControllerConfiguration configuration) {
+    actionLabel = configuration.getNode(NAME);
+    messageLabel = configuration.getNode(MESSAGE_TEXT);
   }
 
   @Override

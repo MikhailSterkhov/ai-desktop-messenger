@@ -20,19 +20,16 @@ import lombok.SneakyThrows;
 import ru.itzstonlex.desktop.itzmsg.chatbot.ChatBotAssistant;
 import ru.itzstonlex.desktop.itzmsg.chatbot.type.request.ChatBotRequest;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.FormComponentsMap;
-import ru.itzstonlex.desktop.itzmsg.form.SceneViewTable;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
+import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 import ru.itzstonlex.desktop.itzmsg.form.controller.observer.ObserveBy;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl.FooterMessageInputEnterObserver;
 import ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl.FooterButtonSendClickObserver;
-import ru.itzstonlex.desktop.itzmsg.form.controller.subaction.ControllerSubActionStorage;
-import ru.itzstonlex.desktop.itzmsg.type.feed.FeedForm;
+import ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl.FooterMessageInputEnterObserver;
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController.TypingStatus;
-import ru.itzstonlex.desktop.itzmsg.type.feed.subaction.FeedSubactionsStorage;
+import ru.itzstonlex.desktop.itzmsg.type.feed.function.FeedFormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.type.message.MessageForm;
 
-@RequiredArgsConstructor
 public final class BothMessagesReceiveController extends AbstractComponentController {
 
   public static final String MESSAGE_FIELD = "message_field";
@@ -53,28 +50,22 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
   private AnchorPane firstMessageAnnotationPanel;
 
   @Getter
-  private final ChatBotHeaderController botUserController;
-
-  @Getter
   private final ChatBotAssistant chatBotAssistant;
 
-  @Getter
-  private final FeedForm feedForm;
-
-  @Override
-  protected ControllerSubActionStorage<?> getSubActionsStorage() {
-    return new FeedSubactionsStorage();
+  public BothMessagesReceiveController(AbstractSceneForm form, ChatBotAssistant chatBotAssistant) {
+    super(form);
+    this.chatBotAssistant = chatBotAssistant;
   }
 
   @Override
-  protected void initNodes(@NonNull FormComponentsMap map) {
-    firstMessageAnnotationPanel = map.getNode(FIRST_MSG_ANNOTATION);
+  protected void initNodes(@NonNull ControllerConfiguration configuration) {
+    firstMessageAnnotationPanel = configuration.getNode(FIRST_MSG_ANNOTATION);
 
-    messageField = map.getNode(MESSAGE_FIELD);
-    messagesBox = map.getNode(MESSAGES_BOX);
+    messageField = configuration.getNode(MESSAGE_FIELD);
+    messagesBox = configuration.getNode(MESSAGES_BOX);
 
     // only for observe
-    sendButton = map.getNode(SEND_BUTTON);
+    sendButton = configuration.getNode(SEND_BUTTON);
   }
 
   @Override
@@ -84,21 +75,22 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
   }
 
   public void onMessageReceive(@NonNull String receivedMessage) {
+    ChatBotHeaderController chatBotHeaderController = getForm().getController(ChatBotHeaderController.class);
 
     // send question
-    callSubaction(FeedSubactionsStorage.SEND, receivedMessage);
-    botUserController.setTypingStatus(TypingStatus.TYPING);
+    fireFunction(FeedFormFunctionReleaser.SEND, receivedMessage);
+    chatBotHeaderController.setTypingStatus(TypingStatus.TYPING);
 
     // send answer
     ChatBotRequest chatBotRequest = new ChatBotRequest(receivedMessage);
     chatBotAssistant.completeBestSuggestion(chatBotRequest)
-        .thenAcceptAsync(response -> callSubaction(FeedSubactionsStorage.REPLY, response.getMessageText()));
+        .thenAcceptAsync(response -> fireFunction(FeedFormFunctionReleaser.REPLY, response.getMessageText()));
   }
 
   @SneakyThrows
   private Node createMessageNode(MessageForm.SenderType senderType, String msg) {
-    AbstractSceneForm abstractSceneForm = feedForm.getSceneLoader()
-        .loadUncachedSceneForm(SceneViewTable.MESSAGE);
+    AbstractSceneForm abstractSceneForm = getForm().getSceneLoader()
+        .loadUncachedSceneForm(FormKeys.MESSAGE);
 
     MessageForm messageForm = ((MessageForm) abstractSceneForm);
     messageForm.updateMessageText(senderType, msg);

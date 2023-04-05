@@ -18,9 +18,9 @@ import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.SceneLoader;
-import ru.itzstonlex.desktop.itzmsg.form.SceneViewTable;
-import ru.itzstonlex.desktop.itzmsg.form.SceneViewTable.Entry;
+import ru.itzstonlex.desktop.itzmsg.form.FormLoader;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.itzmsg.form.controller.observer.NodeObserver;
 import ru.itzstonlex.desktop.itzmsg.form.controller.observer.NodeObserverConfigurable;
@@ -31,14 +31,14 @@ import ru.itzstonlex.desktop.itzmsg.utility.ClasspathScanner;
 public class LoadingJavaFXController {
 
   private final Stage stage;
-  private SceneLoader sceneLoader;
+  private FormLoader formLoader;
 
   @FXML
   private Label descriptionOfLoading;
 
   @FXML
   void initialize() {
-    sceneLoader = new SceneLoader(stage);
+    formLoader = new FormLoader(stage);
     CompletableFuture.runAsync(() -> {
 
       System.out.println("[Loading] Run asynchronous application parts loading...");
@@ -56,14 +56,14 @@ public class LoadingJavaFXController {
           throw new RuntimeException(e);
         }
 
-        Platform.runLater(() -> sceneLoader.forwardsTo(constructSceneViewTable()[0]));
+        Platform.runLater(() -> formLoader.forwardsTo(constructSceneViewTable()[0]));
       }
     });
   }
 
   private LoadingPartResult configureApplicationForms() {
     CompletableFuture<LoadingPartResult> atomicResult = new CompletableFuture<>();
-    Entry[] entries = constructSceneViewTable();
+    FormKey[] entries = constructSceneViewTable();
 
     try {
       initializeApplicationForms(entries);
@@ -78,11 +78,11 @@ public class LoadingJavaFXController {
     return atomicResult.join();
   }
 
-  private Entry[] constructSceneViewTable() {
-    return new Entry[]
+  private FormKey[] constructSceneViewTable() {
+    return new FormKey[]
         {
-            SceneViewTable.FEED,
-            SceneViewTable.MESSAGE,
+            FormKeys.FEED,
+            FormKeys.MESSAGE,
         };
   }
 
@@ -102,11 +102,11 @@ public class LoadingJavaFXController {
         descriptionOfLoading.getText().concat("\n") + text));
   }
 
-  private void initializeApplicationForms(Entry[] entries) throws IOException {
-    sceneLoader.initializeForms(entries);
+  private void initializeApplicationForms(FormKey[] entries) throws IOException {
+    formLoader.initializeForms(entries);
 
-    Map<Entry, Set<NodeObserver<AbstractComponentController>>> map = loadAllObservers();
-    sceneLoader.getInitializedFormsMap().forEach((view, abstractSceneForm) -> {
+    Map<FormKey, Set<NodeObserver<AbstractComponentController>>> map = loadAllObservers();
+    formLoader.getInitializedFormsMap().forEach((view, abstractSceneForm) -> {
 
       Set<NodeObserver<AbstractComponentController>> observerSet = map.get(view);
       initForm(abstractSceneForm, observerSet);
@@ -162,8 +162,8 @@ public class LoadingJavaFXController {
 
   @SuppressWarnings("unchecked")
   @SneakyThrows
-  private Map<Entry, Set<NodeObserver<AbstractComponentController>>> loadAllObservers() {
-    Map<Entry, Set<NodeObserver<AbstractComponentController>>> map = new HashMap<>();
+  private Map<FormKey, Set<NodeObserver<AbstractComponentController>>> loadAllObservers() {
+    Map<FormKey, Set<NodeObserver<AbstractComponentController>>> map = new HashMap<>();
     Set<Class<?>> allClassesUsingClassLoader = ClasspathScanner.findAllClassesUsingClassLoader(
         "ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl");
 

@@ -1,13 +1,18 @@
 package ru.itzstonlex.desktop.itzmsg.form.usecase;
 
-public interface FormUsecaseKeys {
+import ru.itzstonlex.desktop.itzmsg.usecase.IUsecaseKeysStorage;
 
-  String SCENE_LOADER = "SceneLoader";
-  String FORWARD_SCENEFORM = "ForwardSceneForm";
-  String BACKWARD_SCENEFORM = "BackwardSceneForm";
+public interface FormUsecaseKeys extends IUsecaseKeysStorage {
 
-  String SCENE_HEIGHT = "Height";
-  String SCENE_WIDTH = "Width";
+  Key FORWARD_FORM = new Key("Forward");
+  Key BACKWARD_FORM = new Key("Backward");
 
-  String FRAME_RESIZABLE_DISABLE = "FrameResizableDisable";
+  Key CUSTOM_HEIGHT = new Key("SceneHeight");
+  Key CUSTOM_WIDTH = new Key("SceneWidth");
+
+  // object instances.
+  Key SCENE_LOADER_OBJ = new Key("SceneLoader");
+
+  // flags.
+  Key FRAME_RESIZABLE_DISABLE_FLAG = new Key("FrameResizableDisable");
 }

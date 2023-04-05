@@ -1,14 +1,22 @@
 package ru.itzstonlex.desktop.itzmsg.form;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
+import ru.itzstonlex.desktop.itzmsg.form.function.FormFunction;
+import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionProcessor;
+import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecaseKeys;
 import ru.itzstonlex.desktop.itzmsg.utility.RuntimeBlocker;
@@ -19,7 +27,9 @@ public abstract class AbstractSceneForm {
 
   @ToString.Include
   @Getter
-  private final SceneViewTable.Entry viewEntry;
+  private final FormKey viewFormKey;
+
+  private final Map<String, FormFunctionProcessor> functionProcessorsMap = new HashMap<>();
 
   @Getter
   private final Set<AbstractComponentController> componentControllers = new HashSet<>();
@@ -33,8 +43,8 @@ public abstract class AbstractSceneForm {
   @Setter
   private Parent javafxNode;
 
-  public final SceneLoader getSceneLoader() {
-    return usecase.get(FormUsecaseKeys.SCENE_LOADER);
+  public final FormLoader getSceneLoader() {
+    return usecase.get(FormUsecaseKeys.SCENE_LOADER_OBJ);
   }
 
   protected final void addController(AbstractComponentController controller) {
@@ -49,6 +59,12 @@ public abstract class AbstractSceneForm {
     }
   }
 
+  public abstract FormFunctionReleaser<?> newFunctionReleaser();
+
+  public abstract void initializeUsecase(FormUsecase usecase);
+
+  public abstract void initializeControllers();
+
   @FXML
   void initialize() {
     initializationBlocker.checkPrecondition();
@@ -57,10 +73,56 @@ public abstract class AbstractSceneForm {
     initializeUsecase(usecase);
 
     initComponentsControllers();
+
+    try {
+      @SuppressWarnings("unchecked")
+      FormFunctionReleaser<AbstractSceneForm> functionReleaser = (FormFunctionReleaser<AbstractSceneForm>) newFunctionReleaser();
+
+      if (functionReleaser != null) {
+        initializeControllerProcesses(functionReleaser);
+      }
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+
     initializationBlocker.block();
   }
 
-  public abstract void initializeUsecase(FormUsecase usecase);
+  @SuppressWarnings("unchecked")
+  public <T extends AbstractComponentController> T getController(Class<T> controllerType) {
+    return (T) componentControllers.stream()
+        .filter(controller -> controller.getClass() == controllerType).findFirst()
+        .orElse(null);
+  }
 
-  public abstract void initializeControllers();
-}
+  private void initializeControllerProcesses(FormFunctionReleaser<AbstractSceneForm> formFunctionReleaser) throws IllegalAccessException {
+    formFunctionReleaser.setForm(this);
+
+    Class<?> cls = formFunctionReleaser.getClass();
+    for (Method declaredMethod : cls.getDeclaredMethods()) {
+      FormFunction annotation = declaredMethod.getDeclaredAnnotation(FormFunction.class);
+
+      if (annotation != null) {
+        FormFunctionProcessor processAction = (values) -> {
+          try {
+            declaredMethod.invoke(formFunctionReleaser, values);
+          }
+          catch (Exception exception) {
+            exception.printStackTrace();
+          }
+        };
+
+        functionProcessorsMap.put(annotation.key(), processAction);
+      }
+    }
+  }
+
+  public final void fireFunction(String name, Object... values) {
+    FormFunctionProcessor processAction = functionProcessorsMap.get(name);
+    if (processAction == null) {
+      throw new NullPointerException(getClass() + " - failed sub-action \"" + name + "\" execution: process is not found!");
+    }
+
+    System.out.println("[ComponentController] Call internal sub-action \"" + name + "\" for " + getClass().getName());
+    Platform.runLater(() -> processAction.process(values));
+  }}

@@ -8,9 +8,10 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import lombok.NonNull;
-import ru.itzstonlex.desktop.itzmsg.form.FormComponentsMap;
+import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
+import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.subaction.ControllerSubActionStorage;
+import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.utility.Schedulers;
 
 public final class CopyActionLabelController extends AbstractComponentController {
@@ -21,15 +22,14 @@ public final class CopyActionLabelController extends AbstractComponentController
   private Label actionLabel;
   private Label messageLabel;
 
-  @Override
-  protected ControllerSubActionStorage<?> getSubActionsStorage() {
-    return null;
+  public CopyActionLabelController(AbstractSceneForm form) {
+    super(form);
   }
 
   @Override
-  protected void initNodes(@NonNull FormComponentsMap map) {
-    actionLabel = map.getNode(NAME);
-    messageLabel = map.getNode(MESSAGE_TEXT);
+  protected void initNodes(@NonNull ControllerConfiguration configuration) {
+    actionLabel = configuration.getNode(NAME);
+    messageLabel = configuration.getNode(MESSAGE_TEXT);
   }
 
   @Override

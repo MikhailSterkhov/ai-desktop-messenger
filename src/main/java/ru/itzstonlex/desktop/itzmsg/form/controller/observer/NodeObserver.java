@@ -2,14 +2,15 @@ package ru.itzstonlex.desktop.itzmsg.form.controller.observer;
 
 import javafx.scene.Node;
 import lombok.NonNull;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.SceneViewTable;
 
 public interface NodeObserver<T extends AbstractComponentController> {
 
   void beginObserving();
 
-  SceneViewTable.Entry getView();
+  FormKeys.FormKey getView();
 
   T getController();
 
