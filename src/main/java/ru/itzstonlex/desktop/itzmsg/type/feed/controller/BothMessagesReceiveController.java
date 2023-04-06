@@ -20,13 +20,12 @@ import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.ObserveBy;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl.FooterButtonSendClickObserver;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl.FooterMessageInputEnterObserver;
+import ru.itzstonlex.desktop.itzmsg.form.observer.ObserveBy;
+import ru.itzstonlex.desktop.itzmsg.form.observer.impl.FooterButtonSendClickObserver;
+import ru.itzstonlex.desktop.itzmsg.form.observer.impl.FooterMessageInputEnterObserver;
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController.TypingStatus;
 import ru.itzstonlex.desktop.itzmsg.type.feed.function.FeedFormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.type.message.MessageForm;
-import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser.SenderType;
 
 public final class BothMessagesReceiveController extends AbstractComponentController {
@@ -51,7 +50,7 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
   @Getter
   private final ChatBotAssistant chatBotAssistant;
 
-  public BothMessagesReceiveController(AbstractSceneForm form, ChatBotAssistant chatBotAssistant) {
+  public BothMessagesReceiveController(AbstractSceneForm<?> form, ChatBotAssistant chatBotAssistant) {
     super(form);
     this.chatBotAssistant = chatBotAssistant;
   }
@@ -87,7 +86,7 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
 
   @SneakyThrows
   private Node createMessageNode(SenderType senderType, String msg) {
-    AbstractSceneForm messageForm = getForm().getSceneLoader()
+    AbstractSceneForm<?> messageForm = getForm().getSceneLoader()
         .loadUncachedForm(FormKeys.MESSAGE);
 
     // todo - replace to function MessageFormFunctionReleaser.UPDATE_MESSAGE_TEXT

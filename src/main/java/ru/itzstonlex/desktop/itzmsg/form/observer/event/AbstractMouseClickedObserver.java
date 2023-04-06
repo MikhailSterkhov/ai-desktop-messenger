@@ -1,8 +1,8 @@
-package ru.itzstonlex.desktop.itzmsg.form.controller.observer.event;
+package ru.itzstonlex.desktop.itzmsg.form.observer.event;
 
 import javafx.scene.Node;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.AbstractNodeObserver;
+import ru.itzstonlex.desktop.itzmsg.form.observer.AbstractNodeObserver;
 
 public abstract class AbstractMouseClickedObserver<T extends AbstractComponentController>
     extends AbstractNodeObserver<T>

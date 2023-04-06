@@ -3,6 +3,7 @@ package ru.itzstonlex.desktop.itzmsg.type.message.function;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextAlignment;
 import lombok.NonNull;
@@ -11,6 +12,8 @@ import ru.itzstonlex.desktop.itzmsg.form.function.FormFunction;
 import ru.itzstonlex.desktop.itzmsg.type.message.MessageForm;
 import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTextController;
 import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTimeController;
+import ru.itzstonlex.desktop.itzmsg.type.message.view.MessageFormFromViewConfiguration;
+import ru.itzstonlex.desktop.itzmsg.type.message.view.MessageFormFrontView;
 import ru.itzstonlex.desktop.itzmsg.utility.ImageViewUtils;
 import ru.itzstonlex.desktop.itzmsg.utility.ImageViewUtils.AvatarType;
 
@@ -79,12 +82,15 @@ public final class MessageFormFunctionReleaser extends AbstractFormFunctionRelea
   }
 
   private void updateMessageDataBySender(@NonNull MessageForm form, @NonNull SenderType senderType) {
-    form.fullMessageBox.setTranslateX(TRANSLATION_X);
+    MessageFormFrontView view = form.getView();
 
-    senderType.updateAvatar(form.senderAvatar);
+    HBox horizontalMessageBox = view.find(MessageFormFromViewConfiguration.MESSAGE_FULL_HORIZONTAL_BOX);
+    horizontalMessageBox.setTranslateX(TRANSLATION_X);
+
+    senderType.updateAvatar(view.find(MessageFormFromViewConfiguration.MESSAGE_SENDER_AVATAR));
     //senderType.updateMessageLabelPosition(messageLabel);
 
-    senderType.updateMessageBoxPosition(form.messageBox);
-    senderType.updateMessageBoxPosition(form.fullMessageBox);
+    senderType.updateMessageBoxPosition(view.find(MessageFormFromViewConfiguration.MESSAGE_VERTICAL_BOX));
+    senderType.updateMessageBoxPosition(horizontalMessageBox);
   }
 }

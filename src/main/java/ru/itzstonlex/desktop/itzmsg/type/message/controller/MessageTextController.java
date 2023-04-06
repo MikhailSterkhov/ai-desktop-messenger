@@ -14,7 +14,7 @@ public final class MessageTextController extends AbstractComponentController {
 
   private Label label;
 
-  public MessageTextController(AbstractSceneForm form) {
+  public MessageTextController(AbstractSceneForm<?> form) {
     super(form);
   }
 

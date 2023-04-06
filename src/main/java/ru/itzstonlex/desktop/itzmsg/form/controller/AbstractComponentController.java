@@ -19,7 +19,7 @@ public abstract class AbstractComponentController {
   private final ControllerConfiguration configuration = new ControllerConfiguration();
 
   @Getter
-  private final AbstractSceneForm form;
+  private final AbstractSceneForm<?> form;
 
   public final AbstractComponentController with(@NonNull String key, @NonNull Node node) {
     configuration.addNode(key, node);
@@ -39,7 +39,7 @@ public abstract class AbstractComponentController {
   }
 
   public final void fireFunction(String name, Object... values) {
-    AbstractSceneForm abstractSceneForm = getForm();
+    AbstractSceneForm<?> abstractSceneForm = getForm();
 
     if (abstractSceneForm != null) {
       abstractSceneForm.fireFunction(name, values);

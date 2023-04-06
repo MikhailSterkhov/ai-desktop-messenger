@@ -17,7 +17,7 @@ public final class MessageTimeController extends AbstractComponentController {
 
   private Label label;
 
-  public MessageTimeController(AbstractSceneForm form) {
+  public MessageTimeController(AbstractSceneForm<?> form) {
     super(form);
   }
 

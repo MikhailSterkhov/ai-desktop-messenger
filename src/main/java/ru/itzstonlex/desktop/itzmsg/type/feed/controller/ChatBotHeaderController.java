@@ -15,7 +15,7 @@ public final class ChatBotHeaderController extends AbstractComponentController {
 
   private Label username, userstatus;
 
-  public ChatBotHeaderController(AbstractSceneForm form) {
+  public ChatBotHeaderController(AbstractSceneForm<?> form) {
     super(form);
   }
 

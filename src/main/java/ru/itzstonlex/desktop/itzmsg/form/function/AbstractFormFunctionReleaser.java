@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 
-public abstract class AbstractFormFunctionReleaser<T extends AbstractSceneForm>
+public abstract class AbstractFormFunctionReleaser<T extends AbstractSceneForm<?>>
     implements FormFunctionReleaser<T> {
 
   @Getter

@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.form.controller.observer;
+package ru.itzstonlex.desktop.itzmsg.form.observer;
 
 public interface NodeObserverConfigurable {
 

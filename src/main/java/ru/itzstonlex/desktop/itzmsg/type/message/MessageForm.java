@@ -1,10 +1,7 @@
 package ru.itzstonlex.desktop.itzmsg.type.message;
 
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
@@ -16,32 +13,18 @@ import ru.itzstonlex.desktop.itzmsg.type.message.controller.DeleteActionLabelCon
 import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTextController;
 import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTimeController;
 import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.type.message.view.MessageFormFromViewConfiguration;
+import ru.itzstonlex.desktop.itzmsg.type.message.view.MessageFormFrontView;
 
-public final class MessageForm extends AbstractSceneForm {
-
-  @FXML
-  private Label copyActionLabel;
-
-  @FXML
-  private Label deleteActionLabel;
-
-  @FXML
-  private Label timeLabel;
-
-  @FXML
-  private Label messageLabel;
-
-  @FXML
-  public VBox messageBox;
-
-  @FXML
-  public HBox fullMessageBox;
-
-  @FXML
-  public ImageView senderAvatar;
+public final class MessageForm extends AbstractSceneForm<MessageFormFrontView> {
 
   public MessageForm() {
     super(FormKeys.MESSAGE);
+  }
+
+  @Override
+  public MessageFormFrontView newFrontView() {
+    return new MessageFormFrontView(this);
   }
 
   @Override
@@ -56,16 +39,21 @@ public final class MessageForm extends AbstractSceneForm {
 
   @Override
   public void initializeControllers() {
-    addController(new MessageTimeController(this).with(MessageTimeController.NAME, timeLabel));
-    addController(new MessageTextController(this).with(MessageTextController.NAME, messageLabel));
+    Label messageTextLabel = getView().find(MessageFormFromViewConfiguration.MESSAGE_TEXT_LABEL);
+
+    addController(new MessageTimeController(this)
+        .with(MessageTimeController.NAME, getView().find(MessageFormFromViewConfiguration.MESSAGE_TIME_LABEL)));
+
+    addController(new MessageTextController(this)
+        .with(MessageTextController.NAME, messageTextLabel));
 
     addController(new CopyActionLabelController(this)
-        .with(CopyActionLabelController.NAME, copyActionLabel)
-        .with(CopyActionLabelController.MESSAGE_TEXT, messageLabel));
+        .with(CopyActionLabelController.NAME, getView().find(MessageFormFromViewConfiguration.COPY_ACTION_LABEL))
+        .with(CopyActionLabelController.MESSAGE_TEXT, messageTextLabel));
 
     addController(new DeleteActionLabelController(this)
-        .with(DeleteActionLabelController.NAME, deleteActionLabel)
-        .with(DeleteActionLabelController.MESSAGE_TEXT, messageLabel));
+        .with(DeleteActionLabelController.NAME, getView().find(MessageFormFromViewConfiguration.DELETE_ACTION_LABEL))
+        .with(DeleteActionLabelController.MESSAGE_TEXT, messageTextLabel));
   }
 
   @Deprecated
@@ -73,12 +61,13 @@ public final class MessageForm extends AbstractSceneForm {
     getController(MessageTimeController.class).updateCurrentTime();
     getController(MessageTextController.class).updateMessageText(newText);
 
-    fullMessageBox.setTranslateX(25);
+    HBox horizontalMessageBox = getView().find(MessageFormFromViewConfiguration.MESSAGE_FULL_HORIZONTAL_BOX);
+    horizontalMessageBox.setTranslateX(25);
 
-    senderType.updateAvatar(senderAvatar);
+    senderType.updateAvatar(getView().find(MessageFormFromViewConfiguration.MESSAGE_SENDER_AVATAR));
     //senderType.updateMessageLabelPosition(messageLabel);
 
-    senderType.updateMessageBoxPosition(messageBox);
-    senderType.updateMessageBoxPosition(fullMessageBox);
+    senderType.updateMessageBoxPosition(getView().find(MessageFormFromViewConfiguration.MESSAGE_VERTICAL_BOX));
+    senderType.updateMessageBoxPosition(horizontalMessageBox);
   }
 }

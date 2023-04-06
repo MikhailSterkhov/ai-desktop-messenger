@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.form.controller.observer.event;
+package ru.itzstonlex.desktop.itzmsg.form.observer.event;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.AbstractNodeObserver;
+import ru.itzstonlex.desktop.itzmsg.form.observer.AbstractNodeObserver;
 
 public abstract class AbstractKeyPressedObserver<T extends AbstractComponentController>
     extends AbstractNodeObserver<T>

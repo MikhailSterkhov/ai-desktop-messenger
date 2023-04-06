@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,15 +18,16 @@ import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionProcessor;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecaseKeys;
+import ru.itzstonlex.desktop.itzmsg.form.view.FormFrontView;
 import ru.itzstonlex.desktop.itzmsg.utility.RuntimeBlocker;
 
 @ToString(onlyExplicitlyIncluded = true)
 @RequiredArgsConstructor
-public abstract class AbstractSceneForm {
+public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
 
   @ToString.Include
   @Getter
-  private final FormKey viewFormKey;
+  protected final FormKey key;
 
   private final Map<String, FormFunctionProcessor> functionProcessorsMap = new HashMap<>();
 
@@ -37,11 +37,14 @@ public abstract class AbstractSceneForm {
   private final RuntimeBlocker initializationBlocker = new RuntimeBlocker();
 
   @Getter
-  private final FormUsecase usecase = new FormUsecase();
+  protected final FormUsecase usecase = new FormUsecase();
 
   @Getter
   @Setter
   private Parent javafxNode;
+
+  @Getter
+  protected V view;
 
   public final FormLoader getSceneLoader() {
     return usecase.get(FormUsecaseKeys.SCENE_LOADER_OBJ);
@@ -59,24 +62,27 @@ public abstract class AbstractSceneForm {
     }
   }
 
+  public abstract V newFrontView();
+
   public abstract FormFunctionReleaser<?> newFunctionReleaser();
 
   public abstract void initializeUsecase(FormUsecase usecase);
 
   public abstract void initializeControllers();
 
-  @FXML
-  void initialize() {
+  public void initializeParameters() {
     initializationBlocker.checkPrecondition();
+    view = newFrontView();
 
-    initializeControllers();
     initializeUsecase(usecase);
+    initializeControllers();
 
     initComponentsControllers();
 
     try {
       @SuppressWarnings("unchecked")
-      FormFunctionReleaser<AbstractSceneForm> functionReleaser = (FormFunctionReleaser<AbstractSceneForm>) newFunctionReleaser();
+      FormFunctionReleaser<AbstractSceneForm<?>> functionReleaser =
+          (FormFunctionReleaser<AbstractSceneForm<?>>) newFunctionReleaser();
 
       if (functionReleaser != null) {
         initializeControllerProcesses(functionReleaser);
@@ -95,7 +101,7 @@ public abstract class AbstractSceneForm {
         .orElse(null);
   }
 
-  private void initializeControllerProcesses(FormFunctionReleaser<AbstractSceneForm> formFunctionReleaser) throws IllegalAccessException {
+  private void initializeControllerProcesses(FormFunctionReleaser<AbstractSceneForm<?>> formFunctionReleaser) throws IllegalAccessException {
     formFunctionReleaser.setForm(this);
 
     Class<?> cls = formFunctionReleaser.getClass();

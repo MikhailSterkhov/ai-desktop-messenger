@@ -26,7 +26,6 @@ public final class FeedFormFunctionReleaser
   @FormFunction(key = SEND)
   public void send(String message) {
     BothMessagesReceiveController controller = getForm().getController(BothMessagesReceiveController.class);
-
     controller.addMessage(SenderType.USER, message);
   }
 }

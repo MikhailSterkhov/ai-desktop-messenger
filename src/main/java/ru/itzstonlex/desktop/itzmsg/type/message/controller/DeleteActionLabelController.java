@@ -22,7 +22,7 @@ public final class DeleteActionLabelController extends AbstractComponentControll
   private String backupMessageText;
   private Font backupMessageFont;
 
-  public DeleteActionLabelController(AbstractSceneForm form) {
+  public DeleteActionLabelController(AbstractSceneForm<?> form) {
     super(form);
   }
 

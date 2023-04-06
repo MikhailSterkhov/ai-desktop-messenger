@@ -15,9 +15,9 @@ import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.FormLoader;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.NodeObserver;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.NodeObserverConfigurable;
-import ru.itzstonlex.desktop.itzmsg.form.controller.observer.ObserveBy;
+import ru.itzstonlex.desktop.itzmsg.form.observer.NodeObserver;
+import ru.itzstonlex.desktop.itzmsg.form.observer.NodeObserverConfigurable;
+import ru.itzstonlex.desktop.itzmsg.form.observer.ObserveBy;
 import ru.itzstonlex.desktop.itzmsg.utility.ClasspathScanner;
 
 public enum ApplicationServices {
@@ -41,7 +41,7 @@ public enum ApplicationServices {
       final FormLoader formLoader = loader.getFormLoader();
 
       final Map<FormKey, Set<NodeObserver<AbstractComponentController>>> observersMap = loadAllObservers();
-      final Map<FormKey, AbstractSceneForm> initializedFormsMap = formLoader.getInitializedFormsMap();
+      final Map<FormKey, AbstractSceneForm<?>> initializedFormsMap = formLoader.getInitializedFormsMap();
 
       initializedFormsMap.forEach((formKey, abstractForm) -> {
 
@@ -60,7 +60,7 @@ public enum ApplicationServices {
     }
 
     @SneakyThrows
-    private void initFormObservers(AbstractSceneForm form, Set<NodeObserver<AbstractComponentController>> observers) {
+    private void initFormObservers(AbstractSceneForm<?> form, Set<NodeObserver<AbstractComponentController>> observers) {
       for (AbstractComponentController controller : form.getComponentControllers()) {
         Class<? extends AbstractComponentController> controllerCls = controller.getClass();
 
@@ -99,7 +99,7 @@ public enum ApplicationServices {
     private Map<FormKey, Set<NodeObserver<AbstractComponentController>>> loadAllObservers() {
       Map<FormKey, Set<NodeObserver<AbstractComponentController>>> map = new HashMap<>();
       Set<Class<?>> allClassesUsingClassLoader = ClasspathScanner.findAllClassesUsingClassLoader(
-          "ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl");
+          "ru.itzstonlex.desktop.itzmsg.form.observer.impl");
 
       for (Class<?> cls : allClassesUsingClassLoader) {
         if (NodeObserver.class.isAssignableFrom(cls)) {

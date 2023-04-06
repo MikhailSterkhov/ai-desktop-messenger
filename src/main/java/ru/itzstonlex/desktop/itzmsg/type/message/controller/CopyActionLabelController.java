@@ -22,7 +22,7 @@ public final class CopyActionLabelController extends AbstractComponentController
   private Label actionLabel;
   private Label messageLabel;
 
-  public CopyActionLabelController(AbstractSceneForm form) {
+  public CopyActionLabelController(AbstractSceneForm<?> form) {
     super(form);
   }
 
