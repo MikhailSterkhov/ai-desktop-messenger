@@ -1,12 +1,12 @@
-package ru.itzstonlex.desktop.itzmsg.type.feed.function;
+package ru.itzstonlex.desktop.itzmsg.form.type.feed.function;
 
 import ru.itzstonlex.desktop.itzmsg.form.function.AbstractFormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunction;
-import ru.itzstonlex.desktop.itzmsg.type.feed.FeedForm;
-import ru.itzstonlex.desktop.itzmsg.type.feed.controller.BothMessagesReceiveController;
-import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController;
-import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController.TypingStatus;
-import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser.SenderType;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.FeedForm;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.BothMessagesReceiveController;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.ChatBotHeaderController;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.ChatBotHeaderController.TypingStatus;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.function.MessageFormFunctionReleaser.SenderType;
 
 public final class FeedFormFunctionReleaser
     extends AbstractFormFunctionReleaser<FeedForm> {

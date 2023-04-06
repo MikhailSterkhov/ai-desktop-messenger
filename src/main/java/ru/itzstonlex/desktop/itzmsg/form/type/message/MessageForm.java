@@ -1,20 +1,19 @@
-package ru.itzstonlex.desktop.itzmsg.type.message;
+package ru.itzstonlex.desktop.itzmsg.form.type.message;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import lombok.Getter;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.controller.CopyActionLabelController;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.controller.DeleteActionLabelController;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.controller.MessageTextController;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.controller.MessageTimeController;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.function.MessageFormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.view.MessageFormFromViewConfiguration;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.view.MessageFormFrontView;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
-import ru.itzstonlex.desktop.itzmsg.type.message.controller.CopyActionLabelController;
-import ru.itzstonlex.desktop.itzmsg.type.message.controller.DeleteActionLabelController;
-import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTextController;
-import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTimeController;
-import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser;
-import ru.itzstonlex.desktop.itzmsg.type.message.view.MessageFormFromViewConfiguration;
-import ru.itzstonlex.desktop.itzmsg.type.message.view.MessageFormFrontView;
 
 public final class MessageForm extends AbstractSceneForm<MessageFormFrontView> {
 

@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.type.feed.view;
+package ru.itzstonlex.desktop.itzmsg.form.type.feed.view;
 
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;

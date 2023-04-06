@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.type.message.function;
+package ru.itzstonlex.desktop.itzmsg.form.type.message.function;
 
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
@@ -9,11 +9,11 @@ import javafx.scene.text.TextAlignment;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.function.AbstractFormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunction;
-import ru.itzstonlex.desktop.itzmsg.type.message.MessageForm;
-import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTextController;
-import ru.itzstonlex.desktop.itzmsg.type.message.controller.MessageTimeController;
-import ru.itzstonlex.desktop.itzmsg.type.message.view.MessageFormFromViewConfiguration;
-import ru.itzstonlex.desktop.itzmsg.type.message.view.MessageFormFrontView;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.view.MessageFormFromViewConfiguration;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.view.MessageFormFrontView;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.MessageForm;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.controller.MessageTextController;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.controller.MessageTimeController;
 import ru.itzstonlex.desktop.itzmsg.utility.ImageViewUtils;
 import ru.itzstonlex.desktop.itzmsg.utility.ImageViewUtils.AvatarType;
 

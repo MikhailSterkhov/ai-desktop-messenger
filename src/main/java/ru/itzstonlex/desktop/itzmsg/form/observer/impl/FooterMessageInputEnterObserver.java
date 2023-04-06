@@ -5,7 +5,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.observer.event.AbstractKeyPressedObserver;
-import ru.itzstonlex.desktop.itzmsg.type.feed.controller.BothMessagesReceiveController;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.BothMessagesReceiveController;
 import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 
 public class FooterMessageInputEnterObserver extends AbstractKeyPressedObserver<BothMessagesReceiveController> {

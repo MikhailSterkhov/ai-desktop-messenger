@@ -1,16 +1,16 @@
-package ru.itzstonlex.desktop.itzmsg.type.feed;
+package ru.itzstonlex.desktop.itzmsg.form.type.feed;
 
 import ru.itzstonlex.desktop.itzmsg.chatbot.ChatBotAssistant;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.BothMessagesReceiveController;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecaseKeys;
-import ru.itzstonlex.desktop.itzmsg.type.feed.controller.BothMessagesReceiveController;
-import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController;
-import ru.itzstonlex.desktop.itzmsg.type.feed.function.FeedFormFunctionReleaser;
-import ru.itzstonlex.desktop.itzmsg.type.feed.view.FeedFormFrontView;
-import ru.itzstonlex.desktop.itzmsg.type.feed.view.FeedFormFrontViewConfiguration;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.ChatBotHeaderController;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.function.FeedFormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.view.FeedFormFrontView;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.view.FeedFormFrontViewConfiguration;
 
 public final class FeedForm extends AbstractSceneForm<FeedFormFrontView> {
 

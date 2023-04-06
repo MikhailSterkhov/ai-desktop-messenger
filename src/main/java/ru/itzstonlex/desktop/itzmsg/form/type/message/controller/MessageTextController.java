@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.type.message.controller;
+package ru.itzstonlex.desktop.itzmsg.form.type.message.controller;
 
 import javafx.scene.control.Label;
 import lombok.NonNull;

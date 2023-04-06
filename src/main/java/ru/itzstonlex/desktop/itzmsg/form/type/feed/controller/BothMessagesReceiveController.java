@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.type.feed.controller;
+package ru.itzstonlex.desktop.itzmsg.form.type.feed.controller;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -23,10 +23,10 @@ import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 import ru.itzstonlex.desktop.itzmsg.form.observer.ObserveBy;
 import ru.itzstonlex.desktop.itzmsg.form.observer.impl.FooterButtonSendClickObserver;
 import ru.itzstonlex.desktop.itzmsg.form.observer.impl.FooterMessageInputEnterObserver;
-import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController.TypingStatus;
-import ru.itzstonlex.desktop.itzmsg.type.feed.function.FeedFormFunctionReleaser;
-import ru.itzstonlex.desktop.itzmsg.type.message.MessageForm;
-import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser.SenderType;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.ChatBotHeaderController.TypingStatus;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.function.FeedFormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.MessageForm;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.function.MessageFormFunctionReleaser.SenderType;
 
 public final class BothMessagesReceiveController extends AbstractComponentController {
 

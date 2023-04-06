@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.type.feed.controller;
+package ru.itzstonlex.desktop.itzmsg.form.type.feed.controller;
 
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;

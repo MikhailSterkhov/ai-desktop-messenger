@@ -5,7 +5,7 @@ import javafx.scene.input.MouseEvent;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.observer.event.AbstractMouseClickedObserver;
-import ru.itzstonlex.desktop.itzmsg.type.feed.controller.BothMessagesReceiveController;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.BothMessagesReceiveController;
 
 public class FooterButtonSendClickObserver extends AbstractMouseClickedObserver<BothMessagesReceiveController> {
 

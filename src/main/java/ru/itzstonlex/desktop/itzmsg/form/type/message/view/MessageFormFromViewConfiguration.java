@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.itzmsg.type.message.view;
+package ru.itzstonlex.desktop.itzmsg.form.type.message.view;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
