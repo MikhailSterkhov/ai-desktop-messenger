@@ -3,6 +3,8 @@ package ru.itzstonlex.desktop.itzmsg.chatbot.type.response;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.stream.Stream;
 
 public final class ChatBotResponseList extends LinkedList<ChatBotResponse> {
 
@@ -14,8 +16,15 @@ public final class ChatBotResponseList extends LinkedList<ChatBotResponse> {
 
   public ChatBotResponse getBestSuggestion() {
     synchronized (lock) {
-      // todo
-      throw new UnsupportedOperationException();
+      OptionalInt maxTemperatureOptional = stream().mapToInt(ChatBotResponse::getTemperature).max();
+
+      if (maxTemperatureOptional.isPresent()) {
+        return stream()
+            .filter(chatBotResponse -> chatBotResponse.getTemperature() == maxTemperatureOptional.getAsInt())
+            .findFirst().orElse(null);
+      }
+
+      return null;
     }
   }
 }

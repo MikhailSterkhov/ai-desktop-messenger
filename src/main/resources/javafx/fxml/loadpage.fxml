@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1080.0" styleClass="wallpaper" stylesheets="@../css/loading.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.itzstonlex.desktop.itzmsg.loading.LoadingJavaFXController">
+<AnchorPane prefHeight="720.0" prefWidth="1080.0" styleClass="wallpaper" stylesheets="@../css/loading.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.itzstonlex.desktop.itzmsg.loading.ApplicationServicesLoadingController">
    <children>
       <AnchorPane layoutX="170.0" layoutY="92.0" prefHeight="411.0" prefWidth="760.0" styleClass="debugging" stylesheets="@../css/loading.css">
          <children>

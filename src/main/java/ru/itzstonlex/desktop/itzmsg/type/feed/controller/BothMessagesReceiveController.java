@@ -1,7 +1,6 @@
 package ru.itzstonlex.desktop.itzmsg.type.feed.controller;
 
 import javafx.collections.ObservableList;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -12,10 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import ru.itzstonlex.desktop.itzmsg.chatbot.ChatBotAssistant;
 import ru.itzstonlex.desktop.itzmsg.chatbot.type.request.ChatBotRequest;
@@ -29,6 +26,8 @@ import ru.itzstonlex.desktop.itzmsg.form.controller.observer.impl.FooterMessageI
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController.TypingStatus;
 import ru.itzstonlex.desktop.itzmsg.type.feed.function.FeedFormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.type.message.MessageForm;
+import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser.SenderType;
 
 public final class BothMessagesReceiveController extends AbstractComponentController {
 
@@ -70,8 +69,7 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
 
   @Override
   protected void configureController() {
-    configureMessagesBox();
-    configureMessageField();
+    // nothing.
   }
 
   public void onMessageReceive(@NonNull String receivedMessage) {
@@ -83,17 +81,17 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
 
     // send answer
     ChatBotRequest chatBotRequest = new ChatBotRequest(receivedMessage);
-    chatBotAssistant.completeBestSuggestion(chatBotRequest)
-        .thenAcceptAsync(response -> fireFunction(FeedFormFunctionReleaser.REPLY, response.getMessageText()));
+    chatBotAssistant.requestBestSuggestion(chatBotRequest)
+        .thenAccept(response -> fireFunction(FeedFormFunctionReleaser.REPLY, response.getMessageText()));
   }
 
   @SneakyThrows
-  private Node createMessageNode(MessageForm.SenderType senderType, String msg) {
-    AbstractSceneForm abstractSceneForm = getForm().getSceneLoader()
-        .loadUncachedSceneForm(FormKeys.MESSAGE);
+  private Node createMessageNode(SenderType senderType, String msg) {
+    AbstractSceneForm messageForm = getForm().getSceneLoader()
+        .loadUncachedForm(FormKeys.MESSAGE);
 
-    MessageForm messageForm = ((MessageForm) abstractSceneForm);
-    messageForm.updateMessageText(senderType, msg);
+    // todo - replace to function MessageFormFunctionReleaser.UPDATE_MESSAGE_TEXT
+    ((MessageForm) messageForm).updateMessageText(senderType, msg);
 
     return messageForm.getJavafxNode();
   }
@@ -130,7 +128,7 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
     return text;
   }
 
-  public void addMessage(MessageForm.SenderType senderType, String text) {
+  public void addMessage(SenderType senderType, String text) {
     ObservableList<Node> childrenList = messagesBox.getChildren();
     Node messageNode = createMessageNode(senderType, reformatMessage(text));
 
@@ -139,21 +137,5 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
     if (firstMessageAnnotationPanel.isVisible()) {
       firstMessageAnnotationPanel.setVisible(false);
     }
-  }
-
-  private void configureMessagesBox() {
-    messagesBox.setMinHeight(Region.USE_COMPUTED_SIZE);
-    messagesBox.setMaxHeight(Region.USE_COMPUTED_SIZE);
-
-    messagesBox.setBackground(TRANSPARENT_BACKGROUND);
-  }
-
-  private void configureMessageField() {
-    messageField.setFont(Font.font(18));
-
-    messageField.setMaxWidth(Region.USE_COMPUTED_SIZE);
-    messageField.setMaxHeight(Region.USE_COMPUTED_SIZE);
-
-    messageField.setCursor(Cursor.TEXT);
   }
 }

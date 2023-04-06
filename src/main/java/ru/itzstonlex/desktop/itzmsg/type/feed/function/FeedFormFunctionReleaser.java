@@ -6,14 +6,13 @@ import ru.itzstonlex.desktop.itzmsg.type.feed.FeedForm;
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.BothMessagesReceiveController;
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController;
 import ru.itzstonlex.desktop.itzmsg.type.feed.controller.ChatBotHeaderController.TypingStatus;
-import ru.itzstonlex.desktop.itzmsg.type.message.MessageForm.SenderType;
+import ru.itzstonlex.desktop.itzmsg.type.message.function.MessageFormFunctionReleaser.SenderType;
 
 public final class FeedFormFunctionReleaser
     extends AbstractFormFunctionReleaser<FeedForm> {
 
   public static final String REPLY = "Reply";
   public static final String SEND = "Send";
-
 
   @FormFunction(key = REPLY)
   public void reply(String message) {

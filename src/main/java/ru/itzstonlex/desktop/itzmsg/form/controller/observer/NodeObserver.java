@@ -3,7 +3,6 @@ package ru.itzstonlex.desktop.itzmsg.form.controller.observer;
 import javafx.scene.Node;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
 
 public interface NodeObserver<T extends AbstractComponentController> {

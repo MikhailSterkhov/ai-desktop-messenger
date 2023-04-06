@@ -118,11 +118,15 @@ public abstract class AbstractSceneForm {
   }
 
   public final void fireFunction(String name, Object... values) {
+    String currentClassName = getClass().getName();
     FormFunctionProcessor processAction = functionProcessorsMap.get(name);
+
     if (processAction == null) {
-      throw new NullPointerException(getClass() + " - failed sub-action \"" + name + "\" execution: process is not found!");
+      throw new NullPointerException(currentClassName + " - failed function \"" + name + "\" execution: NULL");
     }
 
-    System.out.println("[ComponentController] Call internal sub-action \"" + name + "\" for " + getClass().getName());
+    System.out.println("[ComponentController] Call function \"" + name + "\" for " + currentClassName);
     Platform.runLater(() -> processAction.process(values));
-  }}
+  }
+
+}

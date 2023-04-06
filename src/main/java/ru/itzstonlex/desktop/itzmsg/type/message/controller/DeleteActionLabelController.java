@@ -8,9 +8,8 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 
 public final class DeleteActionLabelController extends AbstractComponentController {
 

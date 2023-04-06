@@ -15,6 +15,9 @@ import ru.itzstonlex.desktop.itzmsg.chatbot.type.response.ChatBotResponse;
 
 public class ChatBotAssistant {
 
+  private static final ChatBotResponse DEFAULT_RESPONSE =
+      new ChatBotResponse(0, "К сожалению, мне нечем на это ответить.");
+
   private final List<ChatBotExceptionHandler> exceptionHandlersList =
       Collections.synchronizedList(new ArrayList<>());
 
@@ -23,34 +26,49 @@ public class ChatBotAssistant {
   private final ChatBotKeywordExclusionService keywordExclusionService =
       new ChatBotKeywordExclusionService();
 
-  public CompletableFuture<ChatBotResponseList> completeFullSuggestionsList(@NonNull ChatBotRequest chatBotRequest) {
-    return CompletableFuture.supplyAsync(() -> {
-
-      ChatBotKeywordExclusion exclusion = keywordExclusionService.makeExclusion(chatBotRequest.getPrompt());
-      return exclusion.configureSuggestions();
-
-    }, executorService);
+  private ChatBotResponseList getFullSuggestionsList(@NonNull ChatBotRequest chatBotRequest) {
+    ChatBotKeywordExclusion exclusion = keywordExclusionService.makeExclusion(chatBotRequest.getPrompt());
+    if (exclusion == null)
+      return null;
+    return exclusion.configureSuggestions();
   }
 
-  public CompletableFuture<ChatBotResponse> completeBestSuggestion(@NonNull ChatBotRequest chatBotRequest) {
-    CompletableFuture<ChatBotResponseList> requestFuture = completeFullSuggestionsList(
-        chatBotRequest);
+  private ChatBotResponse getBestSuggestion(@NonNull ChatBotRequest chatBotRequest) {
+    ChatBotResponseList suggestions = getFullSuggestionsList(chatBotRequest);
+    if (suggestions == null)
+      return DEFAULT_RESPONSE;
 
-    requestFuture.exceptionally(this::fireExceptionHandlers);
-    return CompletableFuture.supplyAsync(() -> {
-
-      ChatBotResponseList suggestions = requestFuture.join();
-      return suggestions.getBestSuggestion();
-
-    }, executorService);
+    ChatBotResponse bestSuggestion = suggestions.getBestSuggestion();
+    return (bestSuggestion == null ? DEFAULT_RESPONSE : bestSuggestion);
   }
 
-  private ChatBotResponseList fireExceptionHandlers(@NonNull Throwable throwable) {
+  public CompletableFuture<ChatBotResponseList> requestFullSuggestionsList(@NonNull ChatBotRequest chatBotRequest) {
+    CompletableFuture<ChatBotResponseList> responseListFuture = CompletableFuture.supplyAsync(
+        () -> getFullSuggestionsList(chatBotRequest), executorService);
+
+    responseListFuture.exceptionally(throwable -> {
+
+      ChatBotResponse response = fireExceptionHandlers(throwable);
+      return new ChatBotResponseList(Collections.singletonList(response));
+    });
+
+    return responseListFuture;
+  }
+
+  public CompletableFuture<ChatBotResponse> requestBestSuggestion(@NonNull ChatBotRequest chatBotRequest) {
+    CompletableFuture<ChatBotResponse> responseFuture = CompletableFuture.supplyAsync(
+        () -> getBestSuggestion(chatBotRequest), executorService);
+
+    responseFuture.exceptionally(this::fireExceptionHandlers);
+    return responseFuture;
+  }
+
+  private ChatBotResponse fireExceptionHandlers(@NonNull Throwable throwable) {
     for (ChatBotExceptionHandler chatBotExceptionHandler : exceptionHandlersList) {
       chatBotExceptionHandler.onThrow(throwable);
     }
 
-    return null;
+    return DEFAULT_RESPONSE;
   }
 
   public void addExceptionHandler(@NonNull ChatBotExceptionHandler chatBotExceptionHandler) {

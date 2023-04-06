@@ -65,6 +65,7 @@ public final class FeedForm extends AbstractSceneForm {
   @Override
   public void initializeControllers() {
     ChatBotAssistant chatBotAssistant = new ChatBotAssistant();
+    chatBotAssistant.addExceptionHandler(Throwable::printStackTrace);
 
     ChatBotHeaderController botUserController = new ChatBotHeaderController(this);
     botUserController.with(ChatBotHeaderController.USER_NAME, username)

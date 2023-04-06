@@ -5,7 +5,6 @@ import lombok.NonNull;
 public final class ChatBotKeywordExclusionService {
 
   public ChatBotKeywordExclusion makeExclusion(@NonNull String prompt) {
-    // todo
-    throw new UnsupportedOperationException();
+    return null; // todo
   }
 }

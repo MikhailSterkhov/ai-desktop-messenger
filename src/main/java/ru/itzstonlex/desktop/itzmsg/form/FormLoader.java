@@ -15,8 +15,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
-import ru.itzstonlex.desktop.itzmsg.utility.RuntimeBlocker;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecaseKeys;
+import ru.itzstonlex.desktop.itzmsg.utility.RuntimeBlocker;
 
 @RequiredArgsConstructor
 public final class FormLoader {
@@ -38,7 +38,7 @@ public final class FormLoader {
   @Getter
   private FormKey currentFormKey;
 
-  public AbstractSceneForm loadUncachedSceneForm(FormKey formKey) throws IOException {
+  public AbstractSceneForm loadUncachedForm(FormKey formKey) throws IOException {
     URL resourceUrl = getClass().getResource(File.separator + FormKeys.VIEW_FORMS_PATH + formKey.getResourceFile());
 
     FXMLLoader javafxLoader = new FXMLLoader(resourceUrl);
@@ -58,42 +58,42 @@ public final class FormLoader {
     return abstractSceneForm;
   }
 
-  private void initializeSceneForm(FormKey sceneFormKey) throws IOException {
-    AbstractSceneForm abstractSceneForm = loadUncachedSceneForm(sceneFormKey);
+  private void cacheForm(FormKey formKey) throws IOException {
+    AbstractSceneForm abstractSceneForm = loadUncachedForm(formKey);
 
-    initializedFormsAsNodesMap.put(sceneFormKey, abstractSceneForm.getJavafxNode());
-    loadedJavaFXScenesMap.put(sceneFormKey, new Scene(abstractSceneForm.getJavafxNode()));
-    initializedFormsMap.put(sceneFormKey, abstractSceneForm);
+    initializedFormsAsNodesMap.put(formKey, abstractSceneForm.getJavafxNode());
+    loadedJavaFXScenesMap.put(formKey, new Scene(abstractSceneForm.getJavafxNode()));
+    initializedFormsMap.put(formKey, abstractSceneForm);
   }
 
-  public void initializeForms(FormKey[] entriesForLoad) throws IOException {
+  public void cacheForms(FormKey[] formKeys) throws IOException {
     formsInitBlocker.checkPrecondition();
     formsInitBlocker.block();
 
-    for (FormKey sceneViewFormKey : entriesForLoad) {
-      initializeSceneForm(sceneViewFormKey);
+    for (FormKey sceneViewFormKey : formKeys) {
+      cacheForm(sceneViewFormKey);
     }
   }
 
-  private Scene getJavaFXScene(FormKey sceneFormKey) {
-    return loadedJavaFXScenesMap.get(sceneFormKey);
+  private Scene getJavaFXScene(FormKey formKey) {
+    return loadedJavaFXScenesMap.get(formKey);
   }
 
-  public AbstractSceneForm getCurrentSceneForm() {
-    if (currentFormKey == null) {
+  public AbstractSceneForm getActiveForm() {
+    if (currentFormKey == null)
       return null;
-    }
+
     return initializedFormsMap.get(currentFormKey);
   }
 
-  public void forwardsTo(FormKey sceneFormKey) {
-    onRedirect(sceneFormKey);
-    System.out.println("[SceneLoader] UI was redirected to " + sceneFormKey.getName() + " (" + getCurrentSceneForm().getClass() + ")");
+  public void forwardsTo(FormKey formKey) {
+    onRedirect(formKey);
+    System.out.println("[SceneLoader] UI was redirected to " + formKey.getName() + " (" + getActiveForm().getClass() + ")");
 
     synchronized (redirectBlocker) {
-      Scene scene = getJavaFXScene(sceneFormKey);
+      Scene scene = getJavaFXScene(formKey);
 
-      AbstractSceneForm abstractSceneForm = getCurrentSceneForm();
+      AbstractSceneForm abstractSceneForm = getActiveForm();
       FormUsecase usecase = abstractSceneForm.getUsecase();
 
       stage.setWidth(usecase.get(FormUsecaseKeys.CUSTOM_WIDTH, scene.getWidth()));
@@ -114,12 +114,12 @@ public final class FormLoader {
       FormKey backward = currentFormKey;
 
       if (backward != null) {
-        getCurrentSceneForm().getUsecase().set(FormUsecaseKeys.FORWARD_FORM, forward);
+        getActiveForm().getUsecase().set(FormUsecaseKeys.FORWARD_FORM, forward);
       }
 
       currentFormKey = forward;
 
-      AbstractSceneForm forwardForm = getCurrentSceneForm();
+      AbstractSceneForm forwardForm = getActiveForm();
 
       forwardForm.getUsecase().set(FormUsecaseKeys.BACKWARD_FORM, backward);
       forwardForm.getUsecase().clearKey(FormUsecaseKeys.FORWARD_FORM);
@@ -129,11 +129,7 @@ public final class FormLoader {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends AbstractSceneForm> T getCachedSceneForm(@NonNull FormKeys.FormKey formKey) {
+  public <T extends AbstractSceneForm> T getCachedForm(@NonNull FormKey formKey) {
     return ((T) initializedFormsMap.get(formKey));
-  }
-
-  public Node getCachedSceneFormAsNode(@NonNull FormKeys.FormKey formKey) {
-    return initializedFormsAsNodesMap.get(formKey);
   }
 }
