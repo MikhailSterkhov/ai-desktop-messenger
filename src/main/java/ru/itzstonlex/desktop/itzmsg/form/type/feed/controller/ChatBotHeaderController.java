@@ -6,23 +6,13 @@ import javafx.scene.text.Font;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.view.FeedFormFrontView;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.view.FeedFormFrontViewConfiguration;
 
 public final class ChatBotHeaderController extends AbstractComponentController {
 
-  public static final String USER_NAME = "user_name";
-  public static final String USER_STATUS = "user_status";
-
-  private Label username, userstatus;
-
   public ChatBotHeaderController(AbstractSceneForm<?> form) {
     super(form);
-  }
-
-  @Override
-  protected void initNodes(@NonNull ControllerConfiguration configuration) {
-    username = configuration.getNode(USER_NAME);
-    userstatus = configuration.getNode(USER_STATUS);
   }
 
   @Override
@@ -31,6 +21,8 @@ public final class ChatBotHeaderController extends AbstractComponentController {
   }
 
   private void configureDefaultDisplay() {
+    Label username = getForm().getView().find(FeedFormFrontViewConfiguration.USERNAME_LABEL);
+
     username.setText("Chat Bot Assistant");
     username.setTextFill(Color.WHITE);
 
@@ -40,6 +32,7 @@ public final class ChatBotHeaderController extends AbstractComponentController {
   }
 
   public void setTypingStatus(TypingStatus typingStatus) {
+    Label userstatus = getForm().getView().find(FeedFormFrontViewConfiguration.USER_STATUS_LABEL);
     typingStatus.inject(userstatus);
   }
 

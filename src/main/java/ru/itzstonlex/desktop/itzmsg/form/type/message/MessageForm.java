@@ -1,6 +1,5 @@
 package ru.itzstonlex.desktop.itzmsg.form.type.message;
 
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
@@ -38,21 +37,10 @@ public final class MessageForm extends AbstractSceneForm<MessageFormFrontView> {
 
   @Override
   public void initializeControllers() {
-    Label messageTextLabel = getView().find(MessageFormFromViewConfiguration.MESSAGE_TEXT_LABEL);
-
-    addController(new MessageTimeController(this)
-        .with(MessageTimeController.NAME, getView().find(MessageFormFromViewConfiguration.MESSAGE_TIME_LABEL)));
-
-    addController(new MessageTextController(this)
-        .with(MessageTextController.NAME, messageTextLabel));
-
-    addController(new CopyActionLabelController(this)
-        .with(CopyActionLabelController.NAME, getView().find(MessageFormFromViewConfiguration.COPY_ACTION_LABEL))
-        .with(CopyActionLabelController.MESSAGE_TEXT, messageTextLabel));
-
-    addController(new DeleteActionLabelController(this)
-        .with(DeleteActionLabelController.NAME, getView().find(MessageFormFromViewConfiguration.DELETE_ACTION_LABEL))
-        .with(DeleteActionLabelController.MESSAGE_TEXT, messageTextLabel));
+    addController(new MessageTimeController(this));
+    addController(new MessageTextController(this));
+    addController(new CopyActionLabelController(this));
+    addController(new DeleteActionLabelController(this));
   }
 
   @Deprecated

@@ -24,13 +24,16 @@ public enum ApplicationServices {
   FORMS {
     @Override
     public void load(AsyncServicesLoader loader) {
-      try {
-        final FormLoader formLoader = loader.getFormLoader();
-        formLoader.configureFormsCaches(AsyncServicesLoader.FORMS_TO_LOAD);
-      }
-      catch (IOException exception) {
-        loader.getFormManipulator().shorError(exception);
-      }
+      loader.sync(() -> {
+
+        try {
+          final FormLoader formLoader = loader.getFormLoader();
+          formLoader.configureFormsCaches(AsyncServicesLoader.FORMS_TO_LOAD);
+        }
+        catch (IOException exception) {
+          loader.getFormManipulator().shorError(exception);
+        }
+      });
     }
   },
 
@@ -40,7 +43,7 @@ public enum ApplicationServices {
       final FormLoader formLoader = loader.getFormLoader();
 
       final Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractComponentController>>> observersMap = loadAllObservers();
-      final Map<ApplicationFormKeys.Key, AbstractSceneForm<?>> initializedFormsMap = formLoader.getInitializedFormsMap();
+      final Map<ApplicationFormKeys.Key, AbstractSceneForm<?>> initializedFormsMap = formLoader.getApplicationFormsMap();
 
       initializedFormsMap.forEach((formKey, abstractForm) -> {
 
@@ -50,7 +53,7 @@ public enum ApplicationServices {
         loader.debug("Load %s", abstractFormClassName);
         loader.sync(() -> {
 
-          final LoadingFormManipulator formManipulator = loader.getFormManipulator();
+          LoadingFormManipulator formManipulator = loader.getFormManipulator();
           formManipulator.addLore("Load " + abstractFormClassName);
         });
 

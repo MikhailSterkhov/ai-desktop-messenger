@@ -84,7 +84,7 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
           (FormFunctionReleaser<AbstractSceneForm<?>>) newFunctionReleaser();
 
       if (functionReleaser != null) {
-        initializeControllerProcesses(functionReleaser);
+        initializeFunctions(functionReleaser);
       }
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
@@ -100,7 +100,7 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
         .orElse(null);
   }
 
-  private void initializeControllerProcesses(FormFunctionReleaser<AbstractSceneForm<?>> formFunctionReleaser) throws IllegalAccessException {
+  private void initializeFunctions(FormFunctionReleaser<AbstractSceneForm<?>> formFunctionReleaser) throws IllegalAccessException {
     formFunctionReleaser.setForm(this);
 
     Class<?> cls = formFunctionReleaser.getClass();

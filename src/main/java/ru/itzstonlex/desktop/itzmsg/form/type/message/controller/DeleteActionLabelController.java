@@ -6,18 +6,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.view.MessageFormFromViewConfiguration;
 
 public final class DeleteActionLabelController extends AbstractComponentController {
-
-  public static final String NAME = "name";
-  public static final String MESSAGE_TEXT = "text";
-
-  private Label actionLabel;
-  private Label messageLabel;
 
   private String backupMessageText;
   private Font backupMessageFont;
@@ -27,15 +20,11 @@ public final class DeleteActionLabelController extends AbstractComponentControll
   }
 
   @Override
-  protected void initNodes(@NonNull ControllerConfiguration configuration) {
-    actionLabel = configuration.getNode(NAME);
-    messageLabel = configuration.getNode(MESSAGE_TEXT);
-  }
-
-  @Override
   protected void configureController() {
-    actionLabel.setCursor(Cursor.HAND);
-    actionLabel.setOnMouseClicked(event -> {
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.DELETE_ACTION_LABEL);
+
+    label.setCursor(Cursor.HAND);
+    label.setOnMouseClicked(event -> {
 
       if (isDeleted()) {
         restoreMessageDeleted();
@@ -52,18 +41,22 @@ public final class DeleteActionLabelController extends AbstractComponentControll
   }
 
   private void saveMessageBackup() {
-    backupMessageText = messageLabel.getText();
-    backupMessageFont = messageLabel.getFont();
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.MESSAGE_TEXT_LABEL);
+
+    this.backupMessageText = label.getText();
+    this.backupMessageFont = label.getFont();
   }
 
   public void restoreMessageDeleted() {
     setDefaultFont();
 
-    messageLabel.setText(backupMessageText);
-    messageLabel.setTextFill(Color.BLACK);
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.MESSAGE_TEXT_LABEL);
 
-    backupMessageText = null;
-    backupMessageFont = null;
+    label.setText(backupMessageText);
+    label.setTextFill(Color.BLACK);
+
+    this.backupMessageText = null;
+    this.backupMessageFont = null;
   }
 
   public void deleteMessage() {
@@ -71,34 +64,42 @@ public final class DeleteActionLabelController extends AbstractComponentControll
       return;
     }
 
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.MESSAGE_TEXT_LABEL);
+
     saveMessageBackup();
     setDeletedFont();
 
-    messageLabel.setText("This message has been deleted.");
-    messageLabel.setTextFill(Color.DARKGRAY);
+    label.setText("This message has been deleted.");
+    label.setTextFill(Color.DARKGRAY);
   }
 
   private void setDeletedFont() {
-    Font font = messageLabel.getFont();
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.MESSAGE_TEXT_LABEL);
+
+    Font font = label.getFont();
     Font deletedFont = Font.font(font.getFamily(), FontWeight.NORMAL, FontPosture.ITALIC, font.getSize());
 
-    messageLabel.setFont(deletedFont);
+    label.setFont(deletedFont);
   }
 
   private void setDefaultFont() {
     if (backupMessageFont != null) {
-      messageLabel.setFont(backupMessageFont);
+
+      Label label = getForm().getView().find(MessageFormFromViewConfiguration.MESSAGE_TEXT_LABEL);
+      label.setFont(backupMessageFont);
     }
   }
 
   private void updateLabelDisplay() {
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.DELETE_ACTION_LABEL);
+
     if (isDeleted()) {
-      actionLabel.setText("Restore");
-      actionLabel.setTextFill(Color.web("#c26700"));
+      label.setText("Restore");
+      label.setTextFill(Color.web("#c26700"));
     }
     else {
-      actionLabel.setText("Delete");
-      actionLabel.setTextFill(Color.web("#e80000"));
+      label.setText("Delete");
+      label.setTextFill(Color.web("#e80000"));
     }
   }
 

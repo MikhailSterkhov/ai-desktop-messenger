@@ -10,19 +10,19 @@ import ru.itzstonlex.desktop.itzmsg.form.view.FormFrontViewConfiguration;
 public interface FeedFormFrontViewConfiguration
     extends FormFrontViewConfiguration {
 
+  NodeKey<TextField> INPUT_MESSAGE_FIELD = new NodeKey<>("messageField");
+
+  NodeKey<AnchorPane> NO_MESSAGES_PANEL = new NodeKey<>("firstMessageAnnotationPanel");
+
+  NodeKey<VBox> MESSAGES_DISPLAY_BOX = new NodeKey<>("messagesBox");
+
   NodeKey<Label> USERNAME_LABEL = new NodeKey<>("username");
 
   NodeKey<Label> USER_STATUS_LABEL = new NodeKey<>("userStatus");
-
-  NodeKey<TextField> INPUT_MESSAGE_FIELD = new NodeKey<>("messageField");
 
   NodeKey<Button> MESSAGE_SEND_BUTTON = new NodeKey<>("sendButton");
 
   NodeKey<Button> BOT_SETTINGS_BUTTON = new NodeKey<>("settingsButton");
 
   NodeKey<Button> CHAT_CLEAR_BUTTON = new NodeKey<>("clearButton");
-
-  NodeKey<VBox> LIST_MESSAGES_BOX = new NodeKey<>("messagesBox");
-
-  NodeKey<AnchorPane> NO_MESSAGES_PANEL = new NodeKey<>("firstMessageAnnotationPanel");
 }

@@ -1,14 +1,11 @@
 package ru.itzstonlex.desktop.itzmsg;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.itzmsg.loading.ApplicationServicesLoadingController;
 import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils;
 import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils.ResourcesDirection;

@@ -7,35 +7,23 @@ import java.util.concurrent.TimeUnit;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
+import ru.itzstonlex.desktop.itzmsg.form.type.message.view.MessageFormFromViewConfiguration;
 import ru.itzstonlex.desktop.itzmsg.utility.Schedulers;
 
 public final class CopyActionLabelController extends AbstractComponentController {
-
-  public static final String NAME = "name";
-  public static final String MESSAGE_TEXT = "text";
-
-  private Label actionLabel;
-  private Label messageLabel;
 
   public CopyActionLabelController(AbstractSceneForm<?> form) {
     super(form);
   }
 
   @Override
-  protected void initNodes(@NonNull ControllerConfiguration configuration) {
-    actionLabel = configuration.getNode(NAME);
-    messageLabel = configuration.getNode(MESSAGE_TEXT);
-  }
-
-  @Override
   protected void configureController() {
-    actionLabel.setCursor(Cursor.HAND);
-    actionLabel.setOnMouseClicked(event -> {
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.COPY_ACTION_LABEL);
+
+    label.setCursor(Cursor.HAND);
+    label.setOnMouseClicked(event -> {
 
       copyMessageToBuffer();
       changeToCopiedStatus();
@@ -45,33 +33,42 @@ public final class CopyActionLabelController extends AbstractComponentController
   }
 
   public void copyMessageToBuffer() {
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.MESSAGE_TEXT_LABEL);
+
     StringSelection stringSelection =
-        new StringSelection(messageLabel.getText());
+        new StringSelection(label.getText());
 
     Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     clipboard.setContents(stringSelection, null);
   }
 
   public void changeToCopiedStatus() {
-    actionLabel.setUnderline(false);
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.COPY_ACTION_LABEL);
 
-    actionLabel.setText("Copied");
-    actionLabel.setTextFill(Color.BLACK);
+    label.setUnderline(false);
+
+    label.setText("Copied");
+    label.setTextFill(Color.BLACK);
 
     Schedulers.lateSync(TimeUnit.SECONDS, 2, this::resetDisplayToDefault);
   }
 
   private void resetDisplayToDefault() {
-    actionLabel.setUnderline(true);
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.COPY_ACTION_LABEL);
 
-    actionLabel.setText("Copy");
-    actionLabel.setTextFill(Color.web("#000fff"));
+    label.setUnderline(true);
+
+    label.setText("Copy");
+    label.setTextFill(Color.web("#000fff"));
 
     configureController();
   }
 
   private void resetMouseClickedEvent() {
-    actionLabel.setCursor(Cursor.DEFAULT);
-    actionLabel.setOnMouseClicked(null);
+    Label label = getForm().getView().find(MessageFormFromViewConfiguration.COPY_ACTION_LABEL);
+
+    label.setCursor(Cursor.DEFAULT);
+
+    label.setOnMouseClicked(null);
   }
 }

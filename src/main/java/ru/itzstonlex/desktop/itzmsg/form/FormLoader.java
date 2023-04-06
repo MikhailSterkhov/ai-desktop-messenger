@@ -1,8 +1,6 @@
 package ru.itzstonlex.desktop.itzmsg.form;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.fxml.FXMLLoader;
@@ -27,18 +25,19 @@ public final class FormLoader {
   private final RuntimeBlocker redirectBlocker = new RuntimeBlocker();
 
   @Getter
-  private final Map<ApplicationFormKeys.Key, AbstractSceneForm<?>> initializedFormsMap = new HashMap<>();
-
-  @Getter
-  private final Map<ApplicationFormKeys.Key, Node> initializedFormsAsNodesMap = new HashMap<>();
-
-  private final Map<ApplicationFormKeys.Key, Scene> loadedJavaFXScenesMap = new HashMap<>();
-
-  @Getter
   private final Stage stage;
 
   @Getter
   private ApplicationFormKeys.Key activeApplicationFormKey;
+
+  @Getter
+  private final Map<ApplicationFormKeys.Key, Node> applicationFormsParentsMap = new HashMap<>();
+
+  @Getter
+  private final Map<ApplicationFormKeys.Key, Scene> applicationFormsScenesMap = new HashMap<>();
+
+  @Getter
+  private final Map<ApplicationFormKeys.Key, AbstractSceneForm<?>> applicationFormsMap = new HashMap<>();
 
   public AbstractSceneForm<?> loadUncachedForm(ApplicationFormKeys.Key key) throws IOException {
     FXMLLoader javafxLoader = new FXMLLoader(
@@ -60,15 +59,19 @@ public final class FormLoader {
     abstractSceneForm.setJavafxNode(parent);
 
     abstractSceneForm.initializeParameters();
+
     return abstractSceneForm;
   }
 
-  private void cacheForm(ApplicationFormKeys.Key key) throws IOException {
+  private void initializeForm(ApplicationFormKeys.Key key) throws IOException {
     AbstractSceneForm<?> abstractSceneForm = loadUncachedForm(key);
+    Parent parentNode = abstractSceneForm.getJavafxNode();
 
-    initializedFormsAsNodesMap.put(key, abstractSceneForm.getJavafxNode());
-    loadedJavaFXScenesMap.put(key, new Scene(abstractSceneForm.getJavafxNode()));
-    initializedFormsMap.put(key, abstractSceneForm);
+    Scene scene = new Scene(abstractSceneForm.getJavafxNode());
+
+    applicationFormsScenesMap.put(key, scene);
+    applicationFormsParentsMap.put(key, parentNode);
+    applicationFormsMap.put(key, abstractSceneForm);
   }
 
   public void configureFormsCaches(ApplicationFormKeys.Key[] formKeys) throws IOException {
@@ -76,19 +79,19 @@ public final class FormLoader {
     formsInitBlocker.block();
 
     for (ApplicationFormKeys.Key sceneViewFormKey : formKeys) {
-      cacheForm(sceneViewFormKey);
+      initializeForm(sceneViewFormKey);
     }
   }
 
   private Scene getJFXScene(ApplicationFormKeys.Key formKey) {
-    return loadedJavaFXScenesMap.get(formKey);
+    return applicationFormsScenesMap.get(formKey);
   }
 
   public AbstractSceneForm<?> getActiveForm() {
     if (activeApplicationFormKey == null)
       return null;
 
-    return initializedFormsMap.get(activeApplicationFormKey);
+    return applicationFormsMap.get(activeApplicationFormKey);
   }
 
   public void forwardsTo(ApplicationFormKeys.Key formKey) {
@@ -135,6 +138,6 @@ public final class FormLoader {
 
   @SuppressWarnings("unchecked")
   public <T extends AbstractSceneForm<?>> T getCachedForm(@NonNull ApplicationFormKeys.Key key) {
-    return ((T) initializedFormsMap.get(key));
+    return ((T) applicationFormsMap.get(key));
   }
 }

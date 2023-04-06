@@ -1,5 +1,7 @@
 package ru.itzstonlex.desktop.itzmsg.form.type.feed;
 
+import javafx.fxml.FXML;
+import javafx.scene.layout.VBox;
 import ru.itzstonlex.desktop.itzmsg.chatbot.ChatBotAssistant;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
@@ -42,21 +44,10 @@ public final class FeedForm extends AbstractSceneForm<FeedFormFrontView> {
   @Override
   public void initializeControllers() {
     ChatBotAssistant chatBotAssistant = new ChatBotAssistant();
+
     chatBotAssistant.addExceptionHandler(Throwable::printStackTrace);
 
-    ChatBotHeaderController botUserController = new ChatBotHeaderController(this);
-    botUserController
-        .with(ChatBotHeaderController.USER_NAME, view.find(FeedFormFrontViewConfiguration.USERNAME_LABEL))
-        .with(ChatBotHeaderController.USER_STATUS, view.find(FeedFormFrontViewConfiguration.USER_STATUS_LABEL));
-
-    BothMessagesReceiveController messagesController = new BothMessagesReceiveController(this, chatBotAssistant);
-    messagesController
-        .with(BothMessagesReceiveController.MESSAGE_FIELD, view.find(FeedFormFrontViewConfiguration.INPUT_MESSAGE_FIELD))
-        .with(BothMessagesReceiveController.MESSAGES_BOX, view.find(FeedFormFrontViewConfiguration.LIST_MESSAGES_BOX))
-        .with(BothMessagesReceiveController.SEND_BUTTON, view.find(FeedFormFrontViewConfiguration.MESSAGE_SEND_BUTTON))
-        .with(BothMessagesReceiveController.FIRST_MSG_ANNOTATION, view.find(FeedFormFrontViewConfiguration.NO_MESSAGES_PANEL));
-
-    addController(botUserController);
-    addController(messagesController);
+    addController(new ChatBotHeaderController(this));
+    addController(new BothMessagesReceiveController(this, chatBotAssistant));
   }
 }

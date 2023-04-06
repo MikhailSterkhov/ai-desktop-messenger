@@ -3,9 +3,11 @@ package ru.itzstonlex.desktop.itzmsg.form.observer.impl;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import lombok.NonNull;
+import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.observer.event.AbstractMouseClickedObserver;
 import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.BothMessagesReceiveController;
+import ru.itzstonlex.desktop.itzmsg.form.type.feed.view.FeedFormFrontViewConfiguration;
 
 public class FooterButtonSendClickObserver extends AbstractMouseClickedObserver<BothMessagesReceiveController> {
 
@@ -22,9 +24,10 @@ public class FooterButtonSendClickObserver extends AbstractMouseClickedObserver<
   @Override
   public void observe(@NonNull MouseEvent event) {
     BothMessagesReceiveController controller = getController();
+    AbstractSceneForm<?> form = controller.getForm();
 
-    TextField component = controller.getConfiguration()
-        .getNode(BothMessagesReceiveController.MESSAGE_FIELD);
+    TextField component = form.getView()
+        .find(FeedFormFrontViewConfiguration.INPUT_MESSAGE_FIELD);
 
     System.out.println("Observe SendButtonObserverMouseClicked.");
 
