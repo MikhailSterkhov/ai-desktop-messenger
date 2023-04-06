@@ -11,14 +11,13 @@ import java.util.Set;
 import javafx.scene.Node;
 import lombok.SneakyThrows;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
+import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.FormLoader;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.itzmsg.form.observer.NodeObserver;
 import ru.itzstonlex.desktop.itzmsg.form.observer.NodeObserverConfigurable;
 import ru.itzstonlex.desktop.itzmsg.form.observer.ObserveBy;
-import ru.itzstonlex.desktop.itzmsg.utility.ClasspathScanner;
+import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils;
 
 public enum ApplicationServices {
 
@@ -27,7 +26,7 @@ public enum ApplicationServices {
     public void load(AsyncServicesLoader loader) {
       try {
         final FormLoader formLoader = loader.getFormLoader();
-        formLoader.cacheForms(AsyncServicesLoader.FORMS_TO_LOAD);
+        formLoader.configureFormsCaches(AsyncServicesLoader.FORMS_TO_LOAD);
       }
       catch (IOException exception) {
         loader.getFormManipulator().shorError(exception);
@@ -40,8 +39,8 @@ public enum ApplicationServices {
     public void load(AsyncServicesLoader loader) {
       final FormLoader formLoader = loader.getFormLoader();
 
-      final Map<FormKey, Set<NodeObserver<AbstractComponentController>>> observersMap = loadAllObservers();
-      final Map<FormKey, AbstractSceneForm<?>> initializedFormsMap = formLoader.getInitializedFormsMap();
+      final Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractComponentController>>> observersMap = loadAllObservers();
+      final Map<ApplicationFormKeys.Key, AbstractSceneForm<?>> initializedFormsMap = formLoader.getInitializedFormsMap();
 
       initializedFormsMap.forEach((formKey, abstractForm) -> {
 
@@ -96,23 +95,25 @@ public enum ApplicationServices {
 
     @SuppressWarnings("unchecked")
     @SneakyThrows
-    private Map<FormKey, Set<NodeObserver<AbstractComponentController>>> loadAllObservers() {
-      Map<FormKey, Set<NodeObserver<AbstractComponentController>>> map = new HashMap<>();
-      Set<Class<?>> allClassesUsingClassLoader = ClasspathScanner.findAllClassesUsingClassLoader(
-          "ru.itzstonlex.desktop.itzmsg.form.observer.impl");
+    private Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractComponentController>>> loadAllObservers() {
+      Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractComponentController>>> map = new HashMap<>();
+
+      Set<Class<?>> allClassesUsingClassLoader = ResourcesUtils.findAllClassesUsingClassLoader(
+          "ru.itzstonlex.desktop.itzmsg.form.observer.impl"
+      );
 
       for (Class<?> cls : allClassesUsingClassLoader) {
         if (NodeObserver.class.isAssignableFrom(cls)) {
 
           NodeObserver<AbstractComponentController> observer = (NodeObserver<AbstractComponentController>) cls.getConstructor().newInstance();
-          Set<NodeObserver<AbstractComponentController>> observersSet = map.get(observer.getView());
+          Set<NodeObserver<AbstractComponentController>> observersSet = map.get(observer.getExtendedFormKey());
 
           if (observersSet == null) {
             observersSet = new HashSet<>();
           }
 
           observersSet.add(observer);
-          map.put(observer.getView(), observersSet);
+          map.put(observer.getExtendedFormKey(), observersSet);
         }
       }
 
@@ -136,7 +137,7 @@ public enum ApplicationServices {
         formManipulator.addLore("[Done]");
 
         final FormLoader formLoader = loader.getFormLoader();
-        formLoader.forwardsTo(FormKeys.FEED);
+        formLoader.forwardsTo(ApplicationFormKeys.FEED);
       });
 
       loader.debug("Application parts was successful loaded");

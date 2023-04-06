@@ -6,13 +6,13 @@ import javafx.scene.input.KeyEvent;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.observer.event.AbstractKeyPressedObserver;
 import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.BothMessagesReceiveController;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 
 public class FooterMessageInputEnterObserver extends AbstractKeyPressedObserver<BothMessagesReceiveController> {
 
   @Override
-  public FormKeys.FormKey getView() {
-    return FormKeys.FEED;
+  public ApplicationFormKeys.Key getExtendedFormKey() {
+    return ApplicationFormKeys.FEED;
   }
 
   @Override

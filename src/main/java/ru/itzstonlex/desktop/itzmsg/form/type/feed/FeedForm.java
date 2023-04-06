@@ -2,7 +2,7 @@ package ru.itzstonlex.desktop.itzmsg.form.type.feed;
 
 import ru.itzstonlex.desktop.itzmsg.chatbot.ChatBotAssistant;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.form.type.feed.controller.BothMessagesReceiveController;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
@@ -18,7 +18,7 @@ public final class FeedForm extends AbstractSceneForm<FeedFormFrontView> {
   private static final double HEIGHT_CONST = 870;
 
   public FeedForm() {
-    super(FormKeys.FEED);
+    super(ApplicationFormKeys.FEED);
   }
 
   @Override

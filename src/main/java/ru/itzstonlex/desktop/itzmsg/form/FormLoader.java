@@ -13,9 +13,11 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecaseKeys;
+import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils;
+import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils.ResourcesDirection;
+import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils.ResourcesGroup;
 import ru.itzstonlex.desktop.itzmsg.utility.RuntimeBlocker;
 
 @RequiredArgsConstructor
@@ -25,32 +27,34 @@ public final class FormLoader {
   private final RuntimeBlocker redirectBlocker = new RuntimeBlocker();
 
   @Getter
-  private final Map<FormKey, AbstractSceneForm<?>> initializedFormsMap = new HashMap<>();
+  private final Map<ApplicationFormKeys.Key, AbstractSceneForm<?>> initializedFormsMap = new HashMap<>();
 
   @Getter
-  private final Map<FormKey, Node> initializedFormsAsNodesMap = new HashMap<>();
+  private final Map<ApplicationFormKeys.Key, Node> initializedFormsAsNodesMap = new HashMap<>();
 
-  private final Map<FormKey, Scene> loadedJavaFXScenesMap = new HashMap<>();
+  private final Map<ApplicationFormKeys.Key, Scene> loadedJavaFXScenesMap = new HashMap<>();
 
   @Getter
   private final Stage stage;
 
   @Getter
-  private FormKey currentFormKey;
+  private ApplicationFormKeys.Key activeApplicationFormKey;
 
-  public AbstractSceneForm<?> loadUncachedForm(FormKey formKey) throws IOException {
-    URL resourceUrl = getClass().getResource(File.separator + FormKeys.VIEW_FORMS_PATH + formKey.getResourceFile());
-
-    FXMLLoader javafxLoader = new FXMLLoader(resourceUrl);
+  public AbstractSceneForm<?> loadUncachedForm(ApplicationFormKeys.Key key) throws IOException {
+    FXMLLoader javafxLoader = new FXMLLoader(
+        ResourcesUtils.toClasspathResourceUrl(
+            ResourcesUtils.createResourcePath(ResourcesGroup.JAVAFX, ResourcesDirection.JAVAFX_MARKDOWNS, key.getName())
+        )
+    );
 
     Parent parent = javafxLoader.load();
     Object controller = javafxLoader.getController();
 
     if (!(controller instanceof AbstractSceneForm)) {
-      throw new IOException("Scene " + formKey.getName().toUpperCase() + " controller is not instanceof from AbstractSceneForm");
+      throw new IOException("Scene " + key.getName().toUpperCase() + " controller is not instanceof from AbstractSceneForm");
     }
 
-    AbstractSceneForm<?> abstractSceneForm = (AbstractSceneForm) controller;
+    AbstractSceneForm<?> abstractSceneForm = ((AbstractSceneForm<?>) controller);
 
     abstractSceneForm.getUsecase().set(FormUsecaseKeys.SCENE_LOADER_OBJ, this);
     abstractSceneForm.setJavafxNode(parent);
@@ -59,40 +63,40 @@ public final class FormLoader {
     return abstractSceneForm;
   }
 
-  private void cacheForm(FormKey formKey) throws IOException {
-    AbstractSceneForm<?> abstractSceneForm = loadUncachedForm(formKey);
+  private void cacheForm(ApplicationFormKeys.Key key) throws IOException {
+    AbstractSceneForm<?> abstractSceneForm = loadUncachedForm(key);
 
-    initializedFormsAsNodesMap.put(formKey, abstractSceneForm.getJavafxNode());
-    loadedJavaFXScenesMap.put(formKey, new Scene(abstractSceneForm.getJavafxNode()));
-    initializedFormsMap.put(formKey, abstractSceneForm);
+    initializedFormsAsNodesMap.put(key, abstractSceneForm.getJavafxNode());
+    loadedJavaFXScenesMap.put(key, new Scene(abstractSceneForm.getJavafxNode()));
+    initializedFormsMap.put(key, abstractSceneForm);
   }
 
-  public void cacheForms(FormKey[] formKeys) throws IOException {
+  public void configureFormsCaches(ApplicationFormKeys.Key[] formKeys) throws IOException {
     formsInitBlocker.checkPrecondition();
     formsInitBlocker.block();
 
-    for (FormKey sceneViewFormKey : formKeys) {
+    for (ApplicationFormKeys.Key sceneViewFormKey : formKeys) {
       cacheForm(sceneViewFormKey);
     }
   }
 
-  private Scene getJavaFXScene(FormKey formKey) {
+  private Scene getJFXScene(ApplicationFormKeys.Key formKey) {
     return loadedJavaFXScenesMap.get(formKey);
   }
 
   public AbstractSceneForm<?> getActiveForm() {
-    if (currentFormKey == null)
+    if (activeApplicationFormKey == null)
       return null;
 
-    return initializedFormsMap.get(currentFormKey);
+    return initializedFormsMap.get(activeApplicationFormKey);
   }
 
-  public void forwardsTo(FormKey formKey) {
+  public void forwardsTo(ApplicationFormKeys.Key formKey) {
     onRedirect(formKey);
     System.out.println("[SceneLoader] UI was redirected to " + formKey.getName() + " (" + getActiveForm().getClass() + ")");
 
     synchronized (redirectBlocker) {
-      Scene scene = getJavaFXScene(formKey);
+      Scene scene = getJFXScene(formKey);
 
       AbstractSceneForm<?> abstractSceneForm = getActiveForm();
       FormUsecase usecase = abstractSceneForm.getUsecase();
@@ -107,18 +111,18 @@ public final class FormLoader {
   }
 
   @SuppressWarnings("ConstantConditions")
-  private void onRedirect(FormKey forward) {
+  private void onRedirect(ApplicationFormKeys.Key forwardKey) {
     redirectBlocker.checkPrecondition();
     redirectBlocker.block();
 
     synchronized (redirectBlocker) {
-      FormKey backward = currentFormKey;
+      ApplicationFormKeys.Key backward = activeApplicationFormKey;
 
       if (backward != null) {
-        getActiveForm().getUsecase().set(FormUsecaseKeys.FORWARD_FORM, forward);
+        getActiveForm().getUsecase().set(FormUsecaseKeys.FORWARD_FORM, forwardKey);
       }
 
-      currentFormKey = forward;
+      activeApplicationFormKey = forwardKey;
 
       AbstractSceneForm<?> forwardForm = getActiveForm();
 
@@ -130,7 +134,7 @@ public final class FormLoader {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends AbstractSceneForm<?>> T getCachedForm(@NonNull FormKey formKey) {
-    return ((T) initializedFormsMap.get(formKey));
+  public <T extends AbstractSceneForm<?>> T getCachedForm(@NonNull ApplicationFormKeys.Key key) {
+    return ((T) initializedFormsMap.get(key));
   }
 }

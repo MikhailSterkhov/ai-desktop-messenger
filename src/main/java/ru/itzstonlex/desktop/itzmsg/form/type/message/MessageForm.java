@@ -4,7 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import lombok.NonNull;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionReleaser;
 import ru.itzstonlex.desktop.itzmsg.form.type.message.controller.CopyActionLabelController;
 import ru.itzstonlex.desktop.itzmsg.form.type.message.controller.DeleteActionLabelController;
@@ -18,7 +18,7 @@ import ru.itzstonlex.desktop.itzmsg.form.usecase.FormUsecase;
 public final class MessageForm extends AbstractSceneForm<MessageFormFrontView> {
 
   public MessageForm() {
-    super(FormKeys.MESSAGE);
+    super(ApplicationFormKeys.MESSAGE);
   }
 
   @Override

@@ -17,7 +17,7 @@ import lombok.SneakyThrows;
 import ru.itzstonlex.desktop.itzmsg.chatbot.ChatBotAssistant;
 import ru.itzstonlex.desktop.itzmsg.chatbot.type.request.ChatBotRequest;
 import ru.itzstonlex.desktop.itzmsg.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.itzmsg.form.controller.ControllerConfiguration;
 import ru.itzstonlex.desktop.itzmsg.form.observer.ObserveBy;
@@ -87,7 +87,7 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
   @SneakyThrows
   private Node createMessageNode(SenderType senderType, String msg) {
     AbstractSceneForm<?> messageForm = getForm().getSceneLoader()
-        .loadUncachedForm(FormKeys.MESSAGE);
+        .loadUncachedForm(ApplicationFormKeys.MESSAGE);
 
     // todo - replace to function MessageFormFunctionReleaser.UPDATE_MESSAGE_TEXT
     ((MessageForm) messageForm).updateMessageText(senderType, msg);

@@ -7,17 +7,16 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
+import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.itzmsg.form.FormLoader;
 
 @RequiredArgsConstructor
 public final class AsyncServicesLoader {
 
-  public static final FormKey[] FORMS_TO_LOAD =
+  public static final ApplicationFormKeys.Key[] FORMS_TO_LOAD =
       {
-          FormKeys.FEED,
-          FormKeys.MESSAGE,
+          ApplicationFormKeys.FEED,
+          ApplicationFormKeys.MESSAGE,
       };
 
   private static final ApplicationServices[] APPLICATION_SERVICES_CONSTS = ApplicationServices.values();

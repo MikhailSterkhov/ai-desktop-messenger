@@ -8,12 +8,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys;
+import ru.itzstonlex.desktop.itzmsg.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.itzmsg.loading.ApplicationServicesLoadingController;
+import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils;
+import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils.ResourcesDirection;
+import ru.itzstonlex.desktop.itzmsg.utility.ResourcesUtils.ResourcesGroup;
 
 public class ApplicationStarter extends Application {
-
-  private static final String LOADPAGE_PATH = (File.separator + FormKeys.VIEW_FORMS_PATH + "loadpage.fxml");
 
   private static final String APP_TITLE = ("Messenger by @itzstonlex");
 
@@ -22,11 +23,13 @@ public class ApplicationStarter extends Application {
 
   @Override
   public void start(Stage stage) {
-    URL resource = getClass().getResource(LOADPAGE_PATH);
+    FXMLLoader fxmlLoader = new FXMLLoader(
+        ResourcesUtils.toClasspathResourceUrl(
+            ResourcesUtils.createResourcePath(ResourcesGroup.JAVAFX, ResourcesDirection.JAVAFX_MARKDOWNS, "loadpage.fxml")
+        )
+    );
 
-    FXMLLoader fxmlLoader = new FXMLLoader(resource);
-    fxmlLoader.setControllerFactory(cls ->
-        new ApplicationServicesLoadingController(stage));
+    fxmlLoader.setControllerFactory(cls -> new ApplicationServicesLoadingController(stage));
 
     try {
       setStageDefaultParameters(stage);

@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.itzstonlex.desktop.itzmsg.form.FormKeys.FormKey;
 import ru.itzstonlex.desktop.itzmsg.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunction;
 import ru.itzstonlex.desktop.itzmsg.form.function.FormFunctionProcessor;
@@ -27,7 +26,7 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
 
   @ToString.Include
   @Getter
-  protected final FormKey key;
+  protected final ApplicationFormKeys.Key key;
 
   private final Map<String, FormFunctionProcessor> functionProcessorsMap = new HashMap<>();
 
