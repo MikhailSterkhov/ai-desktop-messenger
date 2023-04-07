@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane cacheShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="842.0" prefWidth="657.0" styleClass="wallpaper" stylesheets="@../css/feed.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.itzstonlex.desktop.itzmsg.form.type.feed.FeedForm">
+<AnchorPane cacheShape="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="842.0" prefWidth="657.0" styleClass="wallpaper" stylesheets="@../css/feed.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm">
    <children>
       <ScrollPane fx:id="scrollPane" fitToHeight="true" hbarPolicy="NEVER" hmax="0.0" layoutY="65.0" minViewportHeight="80.0" pannable="true" prefHeight="689.0" prefWidth="675.0" vvalue="0.5">
         <content>
