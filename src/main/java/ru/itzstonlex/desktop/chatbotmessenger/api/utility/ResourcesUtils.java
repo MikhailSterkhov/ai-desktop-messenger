@@ -35,15 +35,21 @@ public class ResourcesUtils {
 
     JAVAFX_STYLESHEETS("css"),
     JAVAFX_MARKDOWNS("fxml"),
-
-    SOUNDS_MESSAGE("message"),
     ;
 
     private final String path;
   }
 
+  public String createResourcePath(@NonNull ResourcesGroup resourcesGroup, @NonNull String resourcesDirectionPath) {
+    return String.format(PATH_RESOLVE_FORMAT + PATH_RESOLVE_FORMAT, resourcesGroup.path, resourcesDirectionPath);
+  }
+
   public String createResourcePath(@NonNull ResourcesGroup resourcesGroup, @NonNull ResourcesDirection resourcesDirection) {
     return String.format(PATH_RESOLVE_FORMAT + PATH_RESOLVE_FORMAT, resourcesGroup.path, resourcesDirection.path);
+  }
+
+  public String createResourcePath(@NonNull ResourcesGroup resourcesGroup, @NonNull String resourcesDirectionPath, @NonNull String filename) {
+    return createResourcePath(resourcesGroup, resourcesDirectionPath) + String.format(PATH_RESOLVE_FORMAT, filename);
   }
 
   public String createResourcePath(@NonNull ResourcesGroup resourcesGroup, @NonNull ResourcesDirection resourcesDirection, @NonNull String filename) {
