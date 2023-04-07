@@ -16,7 +16,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" />
          </HBox.margin>
          <image>
-            <Image url="@../../img/avatar/assistent.png" />
+            <Image url="@../../img/avatar/assistant.png" />
          </image>
       </ImageView>
       <VBox fx:id="messageBox" maxWidth="350.0" minHeight="50.0" minWidth="50.0" nodeOrientation="LEFT_TO_RIGHT" spacing="7.0" styleClass="messagebox">

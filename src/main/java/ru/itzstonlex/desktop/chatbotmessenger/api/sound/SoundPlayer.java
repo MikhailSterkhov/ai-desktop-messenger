@@ -3,20 +3,19 @@ package ru.itzstonlex.desktop.chatbotmessenger.api.sound;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesGroup;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.Resource;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceFactory;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceGroup;
 
 @UtilityClass
 public class SoundPlayer {
@@ -39,10 +38,6 @@ public class SoundPlayer {
 
   private final Map<String, SoundInputStreamWrapper> CACHED_SOUND_PLAYERS_MAP = new ConcurrentHashMap<>();
 
-  public String formatSoundName(@NonNull SoundGroup group, @NonNull Sound sound) {
-    return (group.getFolderPath() + ":" + sound.getFilePath());
-  }
-
   public void prepareSoundsFiles() throws JavaLayerException, IOException {
     final GroupedSound[] groupedSoundsArray = GroupedSound.values();
     for (GroupedSound groupedSound : groupedSoundsArray) {
@@ -50,11 +45,14 @@ public class SoundPlayer {
       SoundGroup group = groupedSound.getGroup();
       Sound sound = groupedSound.getSound();
 
-      String resourcePath = ResourcesUtils.createResourcePath(ResourcesGroup.SOUNDS, group.getFolderPath(),
-          sound.getFilePath() + DEFAULT_FILE_FORMAT);
+      String filename = (sound.getFilePath() + DEFAULT_FILE_FORMAT);
+      String resourcePath = ResourceFactory.createPath(ResourceGroup.SOUNDS, group.getFolderPath(), filename);
 
       byte[] resourceBytesArray;
-      try (InputStream resourceInputStream = ResourcesUtils.toClasspathResourceInputStream(resourcePath)) {
+
+      try (Resource soundResource = ResourceFactory.openClasspath(resourcePath);
+          InputStream resourceInputStream = soundResource.toLocalInputStream()) {
+
         resourceBytesArray = new byte[resourceInputStream.available()];
 
         //noinspection ResultOfMethodCallIgnored
@@ -97,5 +95,9 @@ public class SoundPlayer {
         exception.printStackTrace();
       }
     });
+  }
+
+  public String formatSoundName(@NonNull SoundGroup group, @NonNull Sound sound) {
+    return (group.getFolderPath() + ":" + sound.getFilePath());
   }
 }

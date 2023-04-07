@@ -25,9 +25,11 @@ import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.NodeObserverConf
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecaseKeys;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesDirection;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesGroup;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.Resource;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceClasspathScanner;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceFactory;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceDirection;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceGroup;
 import ru.itzstonlex.desktop.chatbotmessenger.api.utility.RuntimeBlocker;
 
 @RequiredArgsConstructor
@@ -52,28 +54,27 @@ public final class FormLoader {
   private final Map<ApplicationFormKeys.Key, AbstractSceneForm<?>> applicationFormsMap = new HashMap<>();
 
   public AbstractSceneForm<?> loadUncachedForm(ApplicationFormKeys.Key key) throws IOException {
-    FXMLLoader javafxLoader = new FXMLLoader(
-        ResourcesUtils.toClasspathResourceUrl(
-            ResourcesUtils.createResourcePath(ResourcesGroup.JAVAFX, ResourcesDirection.JAVAFX_MARKDOWNS, key.getName())
-        )
-    );
+    try (Resource resource = ResourceFactory.openClasspath(ResourceGroup.JAVAFX.file(ResourceDirection.JAVAFX_MARKDOWNS, key.getName()))) {
+      FXMLLoader javafxLoader = new FXMLLoader(resource.toURL());
 
-    Parent parent = javafxLoader.load();
-    Object controller = javafxLoader.getController();
+      Parent parent = javafxLoader.load();
+      Object controller = javafxLoader.getController();
 
-    if (!(controller instanceof AbstractSceneForm)) {
-      throw new IOException("Scene " + key.getName().toUpperCase() + " controller is not instanceof from AbstractSceneForm");
+      if (!(controller instanceof AbstractSceneForm)) {
+        throw new IOException(
+            "Scene " + key.getName().toUpperCase() + " controller is not instanceof from AbstractSceneForm");
+      }
+
+      AbstractSceneForm<?> abstractSceneForm = ((AbstractSceneForm<?>) controller);
+
+      abstractSceneForm.getUsecase().set(FormUsecaseKeys.SCENE_LOADER_OBJ, this);
+      abstractSceneForm.setJavafxNode(parent);
+
+      abstractSceneForm.initializeParameters();
+      injectAllObservers(abstractSceneForm);
+
+      return abstractSceneForm;
     }
-
-    AbstractSceneForm<?> abstractSceneForm = ((AbstractSceneForm<?>) controller);
-
-    abstractSceneForm.getUsecase().set(FormUsecaseKeys.SCENE_LOADER_OBJ, this);
-    abstractSceneForm.setJavafxNode(parent);
-
-    abstractSceneForm.initializeParameters();
-    injectAllObservers(abstractSceneForm);
-
-    return abstractSceneForm;
   }
 
   private void initializeForm(ApplicationFormKeys.Key key) throws IOException {
@@ -203,7 +204,8 @@ public final class FormLoader {
   private Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractSceneForm<?>>>> loadObservers() {
     Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractSceneForm<?>>>> map = new HashMap<>();
 
-    Set<Class<?>> allClassesUsingClassLoader = ResourcesUtils.findAllClassesUsingClassLoader(
+    ResourceClasspathScanner resourceClasspathScanner = new ResourceClasspathScanner();
+    Set<Class<?>> allClassesUsingClassLoader = resourceClasspathScanner.findAllClassesUsingClassLoader(
         "ru.itzstonlex.desktop.chatbotmessenger.observer"
     );
 

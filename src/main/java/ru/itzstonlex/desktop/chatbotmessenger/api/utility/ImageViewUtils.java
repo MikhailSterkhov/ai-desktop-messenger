@@ -1,13 +1,16 @@
 package ru.itzstonlex.desktop.chatbotmessenger.api.utility;
 
+import java.io.IOException;
 import java.io.InputStream;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesDirection;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesGroup;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.Resource;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceFactory;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceDirection;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceGroup;
 
 @UtilityClass
 public class ImageViewUtils {
@@ -23,14 +26,17 @@ public class ImageViewUtils {
   }
 
   public void setImage(@NonNull ImageView imageView, @NonNull String resourcePath) {
-    InputStream resourceAsStream = ResourcesUtils.toClasspathResourceInputStream(
-        ResourcesUtils.createResourcePath(ResourcesGroup.IMAGES, ResourcesDirection.IMAGES_AVATAR, resourcePath)
-    );
+    System.out.println("IMAGE VIEW SET: " + ResourceGroup.IMAGES.file(ResourceDirection.IMAGES_AVATAR, resourcePath));
+    try (Resource resource = ResourceFactory.openSystemClasspath(ResourceGroup.IMAGES.file(ResourceDirection.IMAGES_AVATAR, resourcePath));
+        InputStream inputStream = resource.toLocalInputStream()) {
 
-    if (resourceAsStream != null) {
+      if (inputStream != null) {
 
-      Image image = new Image(resourceAsStream);
-      imageView.setImage(image);
+        Image image = new Image(inputStream);
+        imageView.setImage(image);
+      }
+    } catch (IOException exception) {
+      exception.printStackTrace();
     }
   }
 

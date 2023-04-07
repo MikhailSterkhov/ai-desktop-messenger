@@ -6,10 +6,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.Resource;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceFactory;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceDirection;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceGroup;
 import ru.itzstonlex.desktop.chatbotmessenger.loading.ApplicationServicesLoadingController;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesDirection;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesGroup;
 
 public class ApplicationStarter extends Application {
 
@@ -20,15 +21,12 @@ public class ApplicationStarter extends Application {
 
   @Override
   public void start(Stage stage) {
-    FXMLLoader fxmlLoader = new FXMLLoader(
-        ResourcesUtils.toClasspathResourceUrl(
-            ResourcesUtils.createResourcePath(ResourcesGroup.JAVAFX, ResourcesDirection.JAVAFX_MARKDOWNS, "loadpage.fxml")
-        )
-    );
+    try (Resource resource = ResourceFactory.openClasspath(ResourceGroup.JAVAFX.file(ResourceDirection.JAVAFX_MARKDOWNS,
+        "loadpage.fxml"))) {
 
-    fxmlLoader.setControllerFactory(cls -> new ApplicationServicesLoadingController(stage));
+      FXMLLoader fxmlLoader = new FXMLLoader(resource.toURL());
+      fxmlLoader.setControllerFactory(cls -> new ApplicationServicesLoadingController(stage));
 
-    try {
       setStageDefaultParameters(stage);
 
       Parent window = fxmlLoader.load();
