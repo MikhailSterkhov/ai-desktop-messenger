@@ -61,7 +61,7 @@ public class ResourcesUtils {
     System.out.println("[ClasspathScanner] Scanning package: " + packageName);
 
     InputStream stream = ClassLoader.getSystemClassLoader().getResourceAsStream(packageName.replaceAll("[.]",
-        File.separator));
+        "/"));
 
     InputStreamReader inputStreamReader = new InputStreamReader(Objects.requireNonNull(stream));
     BufferedReader reader = new BufferedReader(inputStreamReader);
