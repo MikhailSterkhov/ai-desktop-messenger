@@ -1,12 +1,13 @@
 package ru.itzstonlex.desktop.chatbotmessenger.api.utility;
 
-import java.io.File;
 import java.io.InputStream;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
+import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesDirection;
+import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ResourcesUtils.ResourcesGroup;
 
 @UtilityClass
 public class ImageViewUtils {
@@ -14,16 +15,17 @@ public class ImageViewUtils {
   @RequiredArgsConstructor
   public enum AvatarType {
 
-    CHAT_BOT("/img/avatar/chatbot.png"),
-    USER("/img/avatar/user.png"),
+    CHAT_BOT("chatbot.png"),
+    USER("user.png"),
     ;
 
-    private final String resourcePath;
+    private final String filename;
   }
 
   public void setImage(@NonNull ImageView imageView, @NonNull String resourcePath) {
-    InputStream resourceAsStream = ImageViewUtils.class.getResourceAsStream(resourcePath
-        .replace("/", File.separator));
+    InputStream resourceAsStream = ResourcesUtils.toClasspathResourceInputStream(
+        ResourcesUtils.createResourcePath(ResourcesGroup.IMAGES, ResourcesDirection.IMAGES_AVATAR, resourcePath)
+    );
 
     if (resourceAsStream != null) {
 
@@ -33,6 +35,6 @@ public class ImageViewUtils {
   }
 
   public void setAvatarImage(@NonNull ImageView imageView, @NonNull AvatarType avatarType) {
-    setImage(imageView, avatarType.resourcePath);
+    setImage(imageView, avatarType.filename);
   }
 }
