@@ -5,8 +5,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
 import lombok.NonNull;
@@ -82,8 +80,8 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
 
     FeedFormFrontView view = form.getView();
 
-    childrenList.add(view.wrapMessageNode(messageNode));
-    childrenList.add(view.getMessageEmptySeparator());
+    childrenList.add(view.createWrappedMessageNode(messageNode));
+    childrenList.add(view.createMessageEmptySeparator(10));
   }
 
   @SuppressWarnings("unchecked")
