@@ -33,6 +33,13 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>javazoom</groupId>
+      <artifactId>jlayer</artifactId>
+      <version>1.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+
     <!--ItzStonlex GitHub Dependencies-->
     <dependency>
       <groupId>com.github.itzstonlex</groupId>

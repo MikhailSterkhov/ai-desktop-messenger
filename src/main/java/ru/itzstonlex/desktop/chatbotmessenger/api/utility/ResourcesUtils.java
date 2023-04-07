@@ -35,6 +35,8 @@ public class ResourcesUtils {
 
     JAVAFX_STYLESHEETS("css"),
     JAVAFX_MARKDOWNS("fxml"),
+
+    SOUNDS_MESSAGE("message"),
     ;
 
     private final String path;

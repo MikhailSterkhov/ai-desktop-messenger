@@ -2,6 +2,7 @@ package ru.itzstonlex.desktop.chatbotmessenger.form.feed.function;
 
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.AbstractFormFunctionReleaser;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunction;
+import ru.itzstonlex.desktop.chatbotmessenger.api.utility.PlaySoundUtils;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.BothMessagesReceiveController;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.ChatBotHeaderController;
@@ -21,6 +22,8 @@ public final class FeedFormFunctionReleaser
 
     ChatBotHeaderController chatBotHeaderController = getForm().getController(ChatBotHeaderController.class);
     chatBotHeaderController.setTypingStatus(TypingStatus.ONLINE);
+
+    PlaySoundUtils.playPickupSound();
   }
 
   @FormFunction(key = SEND)
