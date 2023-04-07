@@ -50,16 +50,29 @@ public final class AsyncServicesLoader {
     Thread.sleep((long) (seconds * 1000L));
   }
 
-  public void loadApplicationServices() {
+  public void loadApplicationServices(ApplicationFormKeys.Key forward) {
     debug("Run asynchronous application loading...");
     async(() -> {
 
       for (ApplicationServices applicationService : APPLICATION_SERVICES_CONSTS) {
+        debug("Service %s has loading...", applicationService);
+
         await(1.25);
         applicationService.load(this);
+
+        sync(() -> {
+
+          String serviceName = applicationService.name().charAt(0) + applicationService.name().toLowerCase().substring(1);
+          String lore = String.format("Application service '%s' was loaded", serviceName);
+
+          formManipulator.addLore(lore);
+        });
       }
 
+      sync(() -> formManipulator.addLore("[ Loading was Completed ]"));
+
       await(3);
+      sync(() -> formLoader.forwardsTo(forward));
     });
   }
 }
