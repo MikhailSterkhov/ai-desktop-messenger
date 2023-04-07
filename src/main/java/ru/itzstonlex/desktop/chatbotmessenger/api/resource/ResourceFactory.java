@@ -31,7 +31,7 @@ public class ResourceFactory {
   }
 
   public Resource openSystemClasspath(@NonNull String pathName) {
-    return new ClasspathResource(ClassLoader.getSystemClassLoader(), pathName);
+    return new ClasspathResource(pathName);
   }
 
   public Resource openClasspath(@NonNull String pathName) {
