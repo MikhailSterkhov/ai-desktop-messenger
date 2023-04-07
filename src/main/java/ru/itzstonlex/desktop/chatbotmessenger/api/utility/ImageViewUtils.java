@@ -26,7 +26,6 @@ public class ImageViewUtils {
   }
 
   public void setImage(@NonNull ImageView imageView, @NonNull String resourcePath) {
-    System.out.println("IMAGE VIEW SET: " + ResourceGroup.IMAGES.file(ResourceDirection.IMAGES_AVATAR, resourcePath));
     try (Resource resource = ResourceFactory.openSystemClasspath(ResourceGroup.IMAGES.file(ResourceDirection.IMAGES_AVATAR, resourcePath));
         InputStream inputStream = resource.toLocalInputStream()) {
 
