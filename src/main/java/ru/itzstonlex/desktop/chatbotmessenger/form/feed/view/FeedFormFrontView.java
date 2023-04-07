@@ -4,9 +4,9 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import lombok.NonNull;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.view.AbstractFormFrontView;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.view.FormFrontViewUsecase;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.AbstractSceneForm;
 
 public final class FeedFormFrontView extends AbstractFormFrontView<FeedFormFrontViewConfiguration> {
 

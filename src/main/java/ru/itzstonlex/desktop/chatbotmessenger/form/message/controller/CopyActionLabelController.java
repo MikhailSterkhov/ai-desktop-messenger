@@ -5,7 +5,6 @@ import com.github.itzstonlex.planoframework.TaskPlan;
 import com.github.itzstonlex.planoframework.factory.PlanoCalendars;
 import com.github.itzstonlex.planoframework.param.TaskParams;
 import com.github.itzstonlex.planoframework.param.cache.TaskParamCacheBuilder;
-import com.github.itzstonlex.planoframework.simplified.SimplifiedScheduledTask;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -15,10 +14,10 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromViewConfiguration;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
-import ru.itzstonlex.desktop.chatbotmessenger.observer.CopyActionLabelClickObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
+import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromViewConfiguration;
+import ru.itzstonlex.desktop.chatbotmessenger.observer.CopyActionLabelClickObserver;
 
 public final class CopyActionLabelController extends AbstractComponentController<MessageForm> {
 

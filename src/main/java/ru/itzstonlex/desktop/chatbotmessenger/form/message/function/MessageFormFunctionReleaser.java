@@ -7,15 +7,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextAlignment;
 import lombok.NonNull;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunction;
-import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromViewConfiguration;
-import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFrontView;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.AbstractFormFunctionReleaser;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunction;
+import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ImageViewUtils;
+import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ImageViewUtils.AvatarType;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.controller.MessageTextController;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.controller.MessageTimeController;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ImageViewUtils;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.ImageViewUtils.AvatarType;
+import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromViewConfiguration;
+import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFrontView;
 
 public final class MessageFormFunctionReleaser extends AbstractFormFunctionReleaser<MessageForm> {
 

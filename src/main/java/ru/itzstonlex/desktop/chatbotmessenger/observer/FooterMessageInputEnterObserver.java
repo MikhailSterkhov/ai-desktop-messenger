@@ -4,10 +4,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import lombok.NonNull;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.event.AbstractKeyPressedObserver;
-import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.BothMessagesReceiveController;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.event.AbstractKeyPressedObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
+import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.BothMessagesReceiveController;
 
 public class FooterMessageInputEnterObserver extends AbstractKeyPressedObserver<FeedForm> {
 

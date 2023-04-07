@@ -7,10 +7,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromViewConfiguration;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
-import ru.itzstonlex.desktop.chatbotmessenger.observer.DeleteActionLabelClickObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
+import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromViewConfiguration;
+import ru.itzstonlex.desktop.chatbotmessenger.observer.DeleteActionLabelClickObserver;
 
 public final class DeleteActionLabelController extends AbstractComponentController<MessageForm> {
 

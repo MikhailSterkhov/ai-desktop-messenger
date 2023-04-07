@@ -1,14 +1,12 @@
 package ru.itzstonlex.desktop.chatbotmessenger.observer;
 
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import lombok.NonNull;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.AbstractNodeObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.event.AbstractMouseClickedObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.controller.DeleteActionLabelController;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
 
 public class DeleteActionLabelClickObserver extends AbstractMouseClickedObserver<MessageForm> {
 

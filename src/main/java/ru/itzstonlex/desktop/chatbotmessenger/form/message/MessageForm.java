@@ -2,6 +2,10 @@ package ru.itzstonlex.desktop.chatbotmessenger.form.message;
 
 import javafx.scene.layout.HBox;
 import lombok.NonNull;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.AbstractSceneForm;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunctionReleaser;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.controller.CopyActionLabelController;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.controller.DeleteActionLabelController;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.controller.MessageTextController;
@@ -9,10 +13,6 @@ import ru.itzstonlex.desktop.chatbotmessenger.form.message.controller.MessageTim
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.function.MessageFormFunctionReleaser;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromViewConfiguration;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFrontView;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.AbstractSceneForm;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunctionReleaser;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecase;
 
 public final class MessageForm extends AbstractSceneForm<MessageFormFrontView> {
 

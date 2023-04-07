@@ -11,19 +11,19 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.ChatBotAssistant;
 import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.type.request.ChatBotRequest;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
-import ru.itzstonlex.desktop.chatbotmessenger.observer.FooterButtonSendClickObserver;
-import ru.itzstonlex.desktop.chatbotmessenger.form.message.function.MessageFormFunctionReleaser.SenderType;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.AbstractSceneForm;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
-import ru.itzstonlex.desktop.chatbotmessenger.observer.FooterMessageInputEnterObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.ChatBotHeaderController.TypingStatus;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.function.FeedFormFunctionReleaser;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontView;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontViewConfiguration;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
+import ru.itzstonlex.desktop.chatbotmessenger.form.message.function.MessageFormFunctionReleaser.SenderType;
+import ru.itzstonlex.desktop.chatbotmessenger.observer.FooterButtonSendClickObserver;
+import ru.itzstonlex.desktop.chatbotmessenger.observer.FooterMessageInputEnterObserver;
 
 public final class BothMessagesReceiveController extends AbstractComponentController<FeedForm> {
 

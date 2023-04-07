@@ -4,9 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import javafx.scene.control.Label;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
+import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromViewConfiguration;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFrontView;
-import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
 
 public final class MessageTimeController extends AbstractComponentController<MessageForm> {
 

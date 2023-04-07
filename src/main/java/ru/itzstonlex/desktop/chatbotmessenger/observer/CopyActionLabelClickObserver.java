@@ -6,9 +6,9 @@ import lombok.NonNull;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.AbstractNodeObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.event.AbstractMouseClickedObserver;
+import ru.itzstonlex.desktop.chatbotmessenger.api.usecase.IUsecaseKeysStorage.Key;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.controller.CopyActionLabelController;
-import ru.itzstonlex.desktop.chatbotmessenger.api.usecase.IUsecaseKeysStorage.Key;
 
 public class CopyActionLabelClickObserver extends AbstractMouseClickedObserver<MessageForm> {
 

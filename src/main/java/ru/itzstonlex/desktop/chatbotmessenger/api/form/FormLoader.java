@@ -61,8 +61,7 @@ public final class FormLoader {
       Object controller = javafxLoader.getController();
 
       if (!(controller instanceof AbstractSceneForm)) {
-        throw new IOException(
-            "Scene " + key.getName().toUpperCase() + " controller is not instanceof from AbstractSceneForm");
+        throw new IOException("Scene " + key.getName().toUpperCase() + " controller is not instanceof from AbstractSceneForm");
       }
 
       AbstractSceneForm<?> abstractSceneForm = ((AbstractSceneForm<?>) controller);

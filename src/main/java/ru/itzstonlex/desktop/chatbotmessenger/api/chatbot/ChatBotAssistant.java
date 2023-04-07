@@ -7,10 +7,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.NonNull;
-import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.type.request.ChatBotRequest;
-import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.type.response.ChatBotResponse;
 import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.exclusion.ChatBotKeywordExclusion;
 import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.exclusion.ChatBotKeywordExclusionService;
+import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.type.request.ChatBotRequest;
+import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.type.response.ChatBotResponse;
 import ru.itzstonlex.desktop.chatbotmessenger.api.chatbot.type.response.ChatBotResponseList;
 
 public class ChatBotAssistant {

@@ -14,10 +14,10 @@ import lombok.ToString;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunction;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunctionProcessor;
-import ru.itzstonlex.desktop.chatbotmessenger.api.form.view.FormFrontView;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunctionReleaser;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecaseKeys;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.view.FormFrontView;
 import ru.itzstonlex.desktop.chatbotmessenger.api.utility.RuntimeBlocker;
 
 @ToString(onlyExplicitlyIncluded = true)
@@ -49,14 +49,14 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
     return usecase.get(FormUsecaseKeys.SCENE_LOADER_OBJ);
   }
 
-  protected final void addController(AbstractComponentController controller) {
+  protected final void addController(AbstractComponentController<?> controller) {
     initializationBlocker.checkPrecondition();
     componentControllers.add(controller);
   }
 
   private void initComponentsControllers() {
     initializationBlocker.checkPrecondition();
-    for (AbstractComponentController controller : componentControllers) {
+    for (AbstractComponentController<?> controller : componentControllers) {
       controller.initialize();
     }
   }
@@ -94,7 +94,7 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends AbstractComponentController> T getController(Class<T> controllerType) {
+  public <T extends AbstractComponentController<?>> T getController(Class<T> controllerType) {
     return (T) componentControllers.stream()
         .filter(controller -> controller.getClass() == controllerType).findFirst()
         .orElse(null);
