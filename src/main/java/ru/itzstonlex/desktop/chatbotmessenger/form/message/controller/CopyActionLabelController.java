@@ -1,9 +1,16 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.message.controller;
 
+import com.github.itzstonlex.planoframework.PlanoScheduler;
+import com.github.itzstonlex.planoframework.TaskPlan;
+import com.github.itzstonlex.planoframework.factory.PlanoCalendars;
+import com.github.itzstonlex.planoframework.param.TaskParams;
+import com.github.itzstonlex.planoframework.param.cache.TaskParamCacheBuilder;
+import com.github.itzstonlex.planoframework.simplified.SimplifiedScheduledTask;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.util.concurrent.TimeUnit;
+import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -12,9 +19,10 @@ import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFromV
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
 import ru.itzstonlex.desktop.chatbotmessenger.observer.CopyActionLabelClickObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.form.message.MessageForm;
-import ru.itzstonlex.desktop.chatbotmessenger.api.utility.Schedulers;
 
 public final class CopyActionLabelController extends AbstractComponentController<MessageForm> {
+
+  private static final PlanoScheduler scheduler = PlanoCalendars.createSingleThreadCalendar().getScheduler();
 
   @ObserveBy(CopyActionLabelClickObserver.class)
   private Label copyActionLabel;
@@ -45,7 +53,13 @@ public final class CopyActionLabelController extends AbstractComponentController
     copyActionLabel.setText("Copied");
     copyActionLabel.setTextFill(Color.BLACK);
 
-    Schedulers.lateSync(TimeUnit.SECONDS, 2, this::resetDisplayToDefault);
+    // schedule label resetting
+    TaskPlan plan = scheduler.configurePlan(TaskParamCacheBuilder.create()
+        .set(TaskParams.TASK_TIME_UNIT, TimeUnit.SECONDS)
+        .set(TaskParams.TASK_DELAY, 2L)
+        .build());
+
+    scheduler.schedule(plan, (Runnable) () -> Platform.runLater(this::resetDisplayToDefault));
   }
 
   private void resetDisplayToDefault() {
