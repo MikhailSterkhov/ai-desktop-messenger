@@ -17,7 +17,7 @@ public final class ResourceClasspathScanner {
     return BASE_PACKAGE_NAME + "." + resolve;
   }
 
-  public ResourceClasspathScannerResponse findAllClassesUsingClassLoader(String packageName) {
+  public ResourceClasspathScannerResponse find(String packageName) {
     System.out.println("[ResourceClasspathScanner] Scanning package: " + packageName);
 
     try (Resource resource = ResourceFactory.openClasspath(packageName.replaceAll("[.]", "/"));

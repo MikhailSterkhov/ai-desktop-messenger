@@ -26,32 +26,19 @@ public class ClasspathResource extends AbstractResource {
   private void fillCloseableInstances() {
     String path = getPathName();
 
-    try {
-      this.localInputStream = getClass().getResourceAsStream(path);
-      if (localInputStream == null) {
-        this.localInputStream = getClass().getResourceAsStream(PATH_SEPARATOR + path);
-      }
+    localInputStream = getClass().getResourceAsStream(path);
+    if (localInputStream == null) {
+      localInputStream = getClass().getResourceAsStream(PATH_SEPARATOR + path);
     }
-    catch (Throwable ignored) {
-      // ignored.
+
+    inputStream = classLoader.getResourceAsStream(path);
+    if (inputStream == null) {
+      inputStream = classLoader.getResourceAsStream(PATH_SEPARATOR + path);
     }
-    try {
-      this.inputStream = classLoader.getResourceAsStream(path);
-      if (inputStream == null) {
-        this.inputStream = classLoader.getResourceAsStream(PATH_SEPARATOR + path);
-      }
-    }
-    catch (Throwable ignored) {
-      // ignored.
-    }
-    try {
-      this.url = classLoader.getResource(path);
-      if (url == null) {
-        this.url = classLoader.getResource(PATH_SEPARATOR + path);
-      }
-    }
-    catch (Throwable ignored) {
-      // ignored.
+
+    url = classLoader.getResource(path);
+    if (url == null) {
+      url = classLoader.getResource(PATH_SEPARATOR + path);
     }
   }
 
