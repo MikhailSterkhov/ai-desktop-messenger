@@ -27,6 +27,7 @@ public interface FeedFormFrontViewConfiguration
   NodeKey<Button> CHAT_CLEAR_BUTTON = new NodeKey<>("clearButton");
 
   // icons
+  NodeKey<ImageView> ICON_SUGGESTIONS = new NodeKey<>("suggestionsIcon");
   NodeKey<ImageView> ICON_MICROPHONE = new NodeKey<>("microphoneIcon");
 
   // panels

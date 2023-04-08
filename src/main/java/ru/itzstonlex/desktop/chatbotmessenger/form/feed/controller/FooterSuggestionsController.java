@@ -1,12 +1,14 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontView;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontViewConfiguration;
+import ru.itzstonlex.desktop.chatbotmessenger.observer.icon.SuggestionsIconClickObserver;
 
-public class FooterSuggestionsController extends AbstractComponentController<FeedForm> {
+public final class FooterSuggestionsController extends AbstractComponentController<FeedForm> {
 
   private static final String[] SUGGESTIONS_ARRAY =
       {
@@ -32,6 +34,15 @@ public class FooterSuggestionsController extends AbstractComponentController<Fee
   }
 
   public void setSuggestionsVisible(boolean flag) {
-    suggestionsDisplayBox.setVisible(flag);
+    updateSuggestionsState(flag);
+
+    ImageView suggestionsIcon = getForm().getView().find(FeedFormFrontViewConfiguration.ICON_SUGGESTIONS);
+
+    SuggestionsIconClickObserver observer = getForm().getNodeObserver(suggestionsIcon);
+    observer.observe(null);
+  }
+
+  void updateSuggestionsState(boolean state) {
+    suggestionsDisplayBox.setVisible(state);
   }
 }

@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.chatbotmessenger.observer;
+package ru.itzstonlex.desktop.chatbotmessenger.observer.icon;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -7,15 +7,19 @@ import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.event.AbstractMouseClickedObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.FooterIconsActionsController;
-import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontViewConfiguration;
+import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontView;
 
-public class MicrophoneIconClickObserver extends AbstractMouseClickedObserver<FeedForm> {
+public abstract class AbstractFeedFooterIconClickObserver extends AbstractMouseClickedObserver<FeedForm> {
 
   private static final double ENABLED_OPACITY = 1.0;
   private static final double DISABLED_OPACITY = 0.5;
 
   private ImageView iconView;
   private FooterIconsActionsController controller;
+
+  protected abstract ImageView findIcon(@NonNull FeedFormFrontView view);
+
+  protected abstract void onStateChanged(@NonNull FooterIconsActionsController controller, boolean flag);
 
   @Override
   public ApplicationFormKeys.Key getApplicationFormKey() {
@@ -24,15 +28,17 @@ public class MicrophoneIconClickObserver extends AbstractMouseClickedObserver<Fe
 
   @Override
   public void configure() {
-    iconView = getForm().getView().find(FeedFormFrontViewConfiguration.ICON_MICROPHONE);
-    controller = getForm().getController(FooterIconsActionsController.class);
+    FeedForm form = getForm();
+
+    controller = form.getController(FooterIconsActionsController.class);
+    iconView = findIcon(form.getView());
   }
 
   @Override
-  public void observe(@NonNull MouseEvent event) {
+  public void observe(MouseEvent event) {
     boolean isEnabled = iconView.getOpacity() == ENABLED_OPACITY;
 
     iconView.setOpacity(isEnabled ? DISABLED_OPACITY : ENABLED_OPACITY);
-    controller.onMicrophoneStateChanged(!isEnabled);
+    onStateChanged(controller, !isEnabled);
   }
 }

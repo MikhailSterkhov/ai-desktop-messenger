@@ -55,7 +55,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <ImageView fx:id="microphoneIcon" fitHeight="20.0" fitWidth="20.0" layoutX="37.0" layoutY="8.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="microphoneIcon" fitHeight="20.0" fitWidth="20.0" layoutX="57.0" layoutY="9.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../img/icon/microphone.png" />
                </image>
@@ -66,11 +66,22 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <HBox fx:id="suggestionsBox" layoutX="75.0" layoutY="6.0" prefHeight="25.0" prefWidth="480.0" spacing="10.0" styleClass="suggestions_message_box">
+            <HBox fx:id="suggestionsBox" layoutX="88.0" layoutY="6.0" prefHeight="25.0" prefWidth="480.0" spacing="10.0" styleClass="suggestions_message_box">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </HBox>
+            <ImageView fx:id="suggestionsIcon" fitHeight="20.0" fitWidth="20.0" layoutX="29.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../img/icon/suggestions.png" />
+               </image>
+               <effect>
+                  <ColorAdjust brightness="1.0" hue="0.1" />
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
          </children></AnchorPane>
       <AnchorPane layoutX="-18.0" layoutY="-22.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="89.0" prefWidth="704.0" styleClass="bot_header">
          <children>

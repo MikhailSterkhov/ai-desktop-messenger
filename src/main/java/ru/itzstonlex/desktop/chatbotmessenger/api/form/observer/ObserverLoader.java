@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.scene.Node;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import net.nodeson.NodesonUnsafe;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.AbstractSceneForm;
@@ -16,7 +17,7 @@ public final class ObserverLoader {
 
   @SuppressWarnings("unchecked")
   @SneakyThrows
-  private void injectObservers(AbstractSceneForm<?> form, Collection<?> injectInstances) {
+  private void injectObservers(@NonNull AbstractSceneForm<?> form, @NonNull Collection<?> injectInstances) {
     ResourceClasspathScannerResponse response = new ResourceClasspathScannerResponse(null,
         injectInstances.stream().map(Object::getClass).collect(Collectors.toSet()));
 
@@ -32,32 +33,34 @@ public final class ObserverLoader {
   }
 
   private void observeNode(
-      AbstractSceneForm<?> form,
-      Node node,
-      Collection<? extends NodeObserver<AbstractSceneForm<?>>> nodeObservers
+      @NonNull AbstractSceneForm<?> form,
+      @NonNull Node node,
+      @NonNull Collection<? extends NodeObserver<AbstractSceneForm<?>>> nodeObservers
   ) {
     nodeObservers.stream()
         .findFirst()
         .ifPresent(
             (nodeObserver) -> {
+
               nodeObserver.setForm(form);
               nodeObserver.setComponent(node);
 
               if (nodeObserver instanceof NodeObserverConfigurable)
                 ((NodeObserverConfigurable) nodeObserver).configure();
 
+              form.getComponentObservers().put(node, nodeObserver);
               nodeObserver.beginObserving();
             });
   }
 
-  public void injectAllObservers(AbstractSceneForm<?> form) {
+  public void injectAllObservers(@NonNull AbstractSceneForm<?> form) {
     injectObservers(form, form.getComponentControllers());
     injectObservers(form, Collections.singletonList(form));
     injectObservers(form, Collections.singletonList(form.getView()));
   }
 
   // utility method
-  private Object getInstanceByClass(Collection<?> objects, Class<?> searchType) {
+  private Object getInstanceByClass(@NonNull Collection<?> objects, @NonNull Class<?> searchType) {
     return objects.stream().filter(obj -> obj.getClass() == searchType).findFirst().orElse(null);
   }
 }

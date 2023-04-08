@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractCompon
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunction;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunctionProcessor;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunctionReleaser;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.NodeObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecaseKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.view.FormFrontView;
@@ -34,6 +36,9 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
 
   @Getter
   private final Set<AbstractComponentController<?>> componentControllers = new HashSet<>();
+
+  @Getter
+  private final Map<Node, NodeObserver<?>> componentObservers = new HashMap<>();
 
   private final RuntimeBlocker initializationBlocker = new RuntimeBlocker();
 
@@ -100,6 +105,11 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
     return (T) componentControllers.stream()
         .filter(controller -> controller.getClass() == controllerType).findFirst()
         .orElse(null);
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends NodeObserver<?>> T getNodeObserver(Node node) {
+    return (T) componentObservers.get(node);
   }
 
   private void initializeFunctions(FormFunctionReleaser<AbstractSceneForm<?>> formFunctionReleaser) throws IllegalAccessException {
