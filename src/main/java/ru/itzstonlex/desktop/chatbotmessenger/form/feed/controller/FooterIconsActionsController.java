@@ -3,6 +3,7 @@ package ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller;
 import java.util.Collection;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -17,6 +18,9 @@ import ru.itzstonlex.desktop.chatbotmessenger.observer.icon.MicrophoneIconClickO
 import ru.itzstonlex.desktop.chatbotmessenger.observer.icon.SuggestionsIconClickObserver;
 
 public final class FooterIconsActionsController extends AbstractComponentController<FeedForm> {
+
+  private static final String MICROPHONE_ENABLED_INPUT_MESSAGE_PROMPT = "Говорите сообщение...";
+  private static final String MICROPHONE_DISABLED_INPUT_MESSAGE_PROMPT = "Наберите сообщение...";
 
   @ObserveBy(SuggestionsIconClickObserver.class)
   private ImageView suggestions;
@@ -79,6 +83,11 @@ public final class FooterIconsActionsController extends AbstractComponentControl
   }
 
   public void onMicrophoneStateChanged(boolean enabled) {
+    TextField inputMessageField = getForm().getView().find(FeedFormFrontViewConfiguration.INPUT_MESSAGE_FIELD);
+
+    inputMessageField.setPromptText(enabled ? MICROPHONE_ENABLED_INPUT_MESSAGE_PROMPT : MICROPHONE_DISABLED_INPUT_MESSAGE_PROMPT);
+    inputMessageField.setDisable(enabled);
+
     // todo - 08.04.2023 - change state of auto-recognize
   }
 }
