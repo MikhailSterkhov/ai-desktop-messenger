@@ -1,12 +1,8 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller;
 
-import java.util.Collection;
 import javafx.geometry.NodeOrientation;
-import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
@@ -18,9 +14,6 @@ import ru.itzstonlex.desktop.chatbotmessenger.observer.icon.MicrophoneIconClickO
 import ru.itzstonlex.desktop.chatbotmessenger.observer.icon.SuggestionsIconClickObserver;
 
 public final class FooterIconsActionsController extends AbstractComponentController<FeedForm> {
-
-  private static final String MICROPHONE_ENABLED_INPUT_MESSAGE_PROMPT = "Говорите сообщение...";
-  private static final String MICROPHONE_DISABLED_INPUT_MESSAGE_PROMPT = "Наберите сообщение...";
 
   @ObserveBy(SuggestionsIconClickObserver.class)
   private ImageView suggestions;
@@ -49,29 +42,11 @@ public final class FooterIconsActionsController extends AbstractComponentControl
     footerSuggestionsController.updateSuggestionsState(enabled);
   }
 
-  private void reverseCachedMessagesOrientation(Collection<Node> messageNodes) {
-    for (Node node : messageNodes) {
-      switch (node.getNodeOrientation()) {
-
-        case RIGHT_TO_LEFT: {
-          node.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-          break;
-        }
-        case LEFT_TO_RIGHT: {
-          node.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-          break;
-        }
-      }
-
-      if (node instanceof Region) {
-        reverseCachedMessagesOrientation(((Region) node).getChildrenUnmodifiable());
-      }
-    }
-  }
-
   public void onDialogSidesStateChanged(boolean enabled) {
-    BothMessagesReceiveController messagesReceiveController = getForm().getController(BothMessagesReceiveController.class);
-    reverseCachedMessagesOrientation(messagesReceiveController.getMessageNodesList());
+    FeedForm form = getForm();
+
+    BothMessagesReceiveController messagesReceiveController = form.getController(BothMessagesReceiveController.class);
+    form.getView().reverseCachedMessagesOrientation(messagesReceiveController.getMessageNodesList());
 
     if (enabled) {
       MessageFormFunctionReleaser.CHAT_BOT_ORIENTATION = NodeOrientation.RIGHT_TO_LEFT;
@@ -83,10 +58,7 @@ public final class FooterIconsActionsController extends AbstractComponentControl
   }
 
   public void onMicrophoneStateChanged(boolean enabled) {
-    TextField inputMessageField = getForm().getView().find(FeedFormFrontViewConfiguration.INPUT_MESSAGE_FIELD);
-
-    inputMessageField.setPromptText(enabled ? MICROPHONE_ENABLED_INPUT_MESSAGE_PROMPT : MICROPHONE_DISABLED_INPUT_MESSAGE_PROMPT);
-    inputMessageField.setDisable(enabled);
+    getForm().getView().switchInputMessageFieldPrompt(enabled);
 
     // todo - 08.04.2023 - change state of auto-recognize
   }

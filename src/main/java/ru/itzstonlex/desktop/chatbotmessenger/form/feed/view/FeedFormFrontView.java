@@ -1,5 +1,7 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.view;
 
+import java.util.Collection;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -12,6 +14,9 @@ import ru.itzstonlex.desktop.chatbotmessenger.api.form.view.AbstractFormFrontVie
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.view.FormFrontViewUsecase;
 
 public final class FeedFormFrontView extends AbstractFormFrontView<FeedFormFrontViewConfiguration> {
+
+  private static final String MICROPHONE_ENABLED_INPUT_MESSAGE_PROMPT = "Говорите сообщение...";
+  private static final String MICROPHONE_DISABLED_INPUT_MESSAGE_PROMPT = "Наберите сообщение...";
 
   public FeedFormFrontView(@NonNull AbstractSceneForm<?> form) {
     super(form, FeedFormFrontViewConfiguration.class);
@@ -57,6 +62,33 @@ public final class FeedFormFrontView extends AbstractFormFrontView<FeedFormFront
 
     HBox suggestionsDisplayBox = super.find(FeedFormFrontViewConfiguration.SUGGESTIONS_DISPLAY_BOX);
     suggestionsDisplayBox.getChildren().add(suggestionButton);
+  }
+
+  public void reverseCachedMessagesOrientation(Collection<Node> messageNodes) {
+    for (Node node : messageNodes) {
+      switch (node.getNodeOrientation()) {
+
+        case RIGHT_TO_LEFT: {
+          node.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+          break;
+        }
+        case LEFT_TO_RIGHT: {
+          node.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+          break;
+        }
+      }
+
+      if (node instanceof Region) {
+        reverseCachedMessagesOrientation(((Region) node).getChildrenUnmodifiable());
+      }
+    }
+  }
+
+  public void switchInputMessageFieldPrompt(boolean microphoneEnabled) {
+    TextField inputMessageField = find(FeedFormFrontViewConfiguration.INPUT_MESSAGE_FIELD);
+
+    inputMessageField.setPromptText(microphoneEnabled ? MICROPHONE_ENABLED_INPUT_MESSAGE_PROMPT : MICROPHONE_DISABLED_INPUT_MESSAGE_PROMPT);
+    inputMessageField.setDisable(microphoneEnabled);
   }
 
   @Override
