@@ -28,7 +28,10 @@ public interface FeedFormFrontViewConfiguration
 
   // icons
   NodeKey<ImageView> ICON_SUGGESTIONS = new NodeKey<>("suggestionsIcon");
+
   NodeKey<ImageView> ICON_MICROPHONE = new NodeKey<>("microphoneIcon");
+
+  NodeKey<ImageView> ICON_DIALOG_SIDES = new NodeKey<>("dialogSidesIcon");
 
   // panels
   NodeKey<VBox> MESSAGES_DISPLAY_BOX = new NodeKey<>("messagesBox");

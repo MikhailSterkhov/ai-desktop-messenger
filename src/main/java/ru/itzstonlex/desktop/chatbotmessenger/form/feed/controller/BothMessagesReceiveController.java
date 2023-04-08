@@ -1,5 +1,7 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -32,6 +34,9 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
 
   @ObserveBy(FooterButtonSendClickObserver.class)
   private Button messageSendButton;
+
+  @Getter
+  private final List<Node> messageNodesList = new ArrayList<>();
 
   @Getter
   private final ChatBotAssistant chatBotAssistant;
@@ -82,8 +87,12 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
   private void addMessageChildren(ObservableList<Node> childrenList, Node messageNode) {
     FeedFormFrontView view = getForm().getView();
 
-    childrenList.add(view.createWrappedMessageNode(messageNode));
+    Node wrappedMessageNode = view.createWrappedMessageNode(messageNode);
+
+    childrenList.add(wrappedMessageNode);
     childrenList.add(view.createMessageEmptySeparator(10));
+
+    messageNodesList.add(wrappedMessageNode);
   }
 
   public void addMessage(SenderType senderType, String text) {

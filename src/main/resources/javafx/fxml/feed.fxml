@@ -66,7 +66,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <HBox fx:id="suggestionsBox" layoutX="88.0" layoutY="6.0" prefHeight="25.0" prefWidth="480.0" spacing="10.0" styleClass="suggestions_message_box">
+            <HBox fx:id="suggestionsBox" layoutX="118.0" layoutY="6.0" prefHeight="25.0" prefWidth="480.0" spacing="10.0" styleClass="suggestions_message_box">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -74,6 +74,17 @@
             <ImageView fx:id="suggestionsIcon" fitHeight="20.0" fitWidth="20.0" layoutX="29.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../img/icon/suggestions.png" />
+               </image>
+               <effect>
+                  <ColorAdjust brightness="1.0" hue="0.1" />
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="dialogSidesIcon" fitHeight="20.0" fitWidth="20.0" layoutX="85.0" layoutY="8.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../img/icon/dialog_sides.png" />
                </image>
                <effect>
                   <ColorAdjust brightness="1.0" hue="0.1" />

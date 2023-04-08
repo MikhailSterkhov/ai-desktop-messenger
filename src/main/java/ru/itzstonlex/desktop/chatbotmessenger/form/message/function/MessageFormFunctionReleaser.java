@@ -19,6 +19,9 @@ import ru.itzstonlex.desktop.chatbotmessenger.form.message.view.MessageFormFront
 
 public final class MessageFormFunctionReleaser extends AbstractFormFunctionReleaser<MessageForm> {
 
+  public static NodeOrientation CHAT_BOT_ORIENTATION = NodeOrientation.LEFT_TO_RIGHT;
+  public static NodeOrientation USER_ORIENTATION = NodeOrientation.RIGHT_TO_LEFT;
+
   public enum SenderType {
 
     CHAT_BOT {
@@ -29,7 +32,7 @@ public final class MessageFormFunctionReleaser extends AbstractFormFunctionRelea
 
       @Override
       public void updateMessageBoxPosition(Pane messageBox) {
-        messageBox.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        messageBox.setNodeOrientation(CHAT_BOT_ORIENTATION);
       }
 
       @Override
@@ -45,7 +48,7 @@ public final class MessageFormFunctionReleaser extends AbstractFormFunctionRelea
 
       @Override
       public void updateMessageBoxPosition(Pane messageBox) {
-        messageBox.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        messageBox.setNodeOrientation(USER_ORIENTATION);
       }
 
       @Override
