@@ -62,6 +62,10 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
     ChatBotRequest chatBotRequest = new ChatBotRequest(receivedMessage);
     chatBotAssistant.requestBestSuggestion(chatBotRequest)
         .thenAccept(response -> fireFunction(FeedFormFunctionReleaser.REPLY, response.getMessageText()));
+
+    // hide suggestions.
+    FooterSuggestionsController footerSuggestionsController = getForm().getController(FooterSuggestionsController.class);
+    footerSuggestionsController.setSuggestionsVisible(false);
   }
 
   @SneakyThrows

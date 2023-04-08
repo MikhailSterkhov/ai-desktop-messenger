@@ -1,8 +1,10 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller;
 
+import javafx.scene.layout.HBox;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontView;
+import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontViewConfiguration;
 
 public class FooterSuggestionsController extends AbstractComponentController<FeedForm> {
 
@@ -13,6 +15,8 @@ public class FooterSuggestionsController extends AbstractComponentController<Fee
           "Как тебя зовут?",
       };
 
+  private HBox suggestionsDisplayBox;
+
   public FooterSuggestionsController(FeedForm form) {
     super(form);
   }
@@ -20,9 +24,14 @@ public class FooterSuggestionsController extends AbstractComponentController<Fee
   @Override
   protected void configureController() {
     FeedFormFrontView view = getForm().getView();
+    suggestionsDisplayBox = view.find(FeedFormFrontViewConfiguration.SUGGESTIONS_DISPLAY_BOX);
 
     for (String suggestionText : SUGGESTIONS_ARRAY) {
       view.createSuggestionBox(suggestionText);
     }
+  }
+
+  public void setSuggestionsVisible(boolean flag) {
+    suggestionsDisplayBox.setVisible(flag);
   }
 }
