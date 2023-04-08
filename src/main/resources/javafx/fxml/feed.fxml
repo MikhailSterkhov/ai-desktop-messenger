@@ -10,6 +10,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -48,12 +49,28 @@
       </ScrollPane>
       <AnchorPane layoutY="753.0" minHeight="90.0" prefWidth="686.0" styleClass="user_request_background">
          <children>
-            <TextField fx:id="messageField" alignment="TOP_LEFT" focusTraversable="false" layoutX="14.0" layoutY="32.0" prefWidth="648.0" promptText="Наберите сообщение..." styleClass="user_request_field" text="Привет, чем ты можешь мне помочь?" />
-            <Button fx:id="sendButton" layoutX="541.0" layoutY="29.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="121.0" styleClass="button_request_send" text="Отправить">
+            <TextField fx:id="messageField" alignment="TOP_LEFT" focusTraversable="false" layoutX="15.0" layoutY="36.0" prefWidth="648.0" promptText="Наберите сообщение..." styleClass="user_request_field" />
+            <Button fx:id="sendButton" layoutX="542.0" layoutY="34.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="121.0" styleClass="button_request_send" text="Отправить">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <ImageView fx:id="microphoneIcon" fitHeight="20.0" fitWidth="20.0" layoutX="37.0" layoutY="8.0" opacity="0.5" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../img/icon/microphone.png" />
+               </image>
+               <effect>
+                  <ColorAdjust brightness="1.0" hue="0.1" />
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <HBox fx:id="suggestionsBox" layoutX="75.0" layoutY="6.0" prefHeight="25.0" prefWidth="480.0" spacing="10.0" styleClass="suggestions_message_box">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </HBox>
          </children></AnchorPane>
       <AnchorPane layoutX="-18.0" layoutY="-22.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="89.0" prefWidth="704.0" styleClass="bot_header">
          <children>

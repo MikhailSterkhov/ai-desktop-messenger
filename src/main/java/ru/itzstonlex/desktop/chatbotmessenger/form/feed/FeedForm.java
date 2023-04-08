@@ -8,6 +8,8 @@ import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecaseKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.BothMessagesReceiveController;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.ChatBotHeaderController;
+import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.FooterIconsActionsController;
+import ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller.FooterSuggestionsController;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.function.FeedFormFunctionReleaser;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontView;
 
@@ -44,7 +46,9 @@ public final class FeedForm extends AbstractSceneForm<FeedFormFrontView> {
 
     chatBotAssistant.addExceptionHandler(Throwable::printStackTrace);
 
-    addController(new ChatBotHeaderController(this));
     addController(new BothMessagesReceiveController(this, chatBotAssistant));
+    addController(new ChatBotHeaderController(this));
+    addController(new FooterIconsActionsController(this));
+    addController(new FooterSuggestionsController(this));
   }
 }

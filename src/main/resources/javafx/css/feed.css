@@ -73,3 +73,12 @@
   -fx-border-color: rgba(255, 255, 255, 0.4);
   -fx-border-radius: 25px;
 }
+
+.suggestions_message_box .button {
+  -fx-background-color: transparent;
+  -fx-background-radius: 25px;
+  -fx-text-fill: #ffffff;
+  -fx-font-size: 12px;
+  -fx-border-color: rgba(255, 255, 255, 0.65);
+  -fx-border-radius: 25px;
+}

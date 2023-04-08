@@ -1,6 +1,9 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.view;
 
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import lombok.NonNull;
@@ -32,6 +35,28 @@ public final class FeedFormFrontView extends AbstractFormFrontView<FeedFormFront
     wrapper.getChildren().add(node);
 
     return wrapper;
+  }
+
+  public void createSuggestionBox(String text) {
+    Button suggestionButton = new Button(text);
+
+    suggestionButton.setMinHeight(Region.USE_COMPUTED_SIZE);
+    suggestionButton.setMaxHeight(Region.USE_COMPUTED_SIZE);
+
+    suggestionButton.setMinWidth(Region.USE_COMPUTED_SIZE);
+    suggestionButton.setMaxWidth(Region.USE_COMPUTED_SIZE);
+
+    suggestionButton.setPrefHeight(Region.USE_COMPUTED_SIZE);
+    suggestionButton.setPrefWidth(Region.USE_COMPUTED_SIZE);
+
+    suggestionButton.setOnAction(actionEvent -> {
+
+      TextField inputMessageField = super.find(FeedFormFrontViewConfiguration.INPUT_MESSAGE_FIELD);
+      inputMessageField.setText(text);
+    });
+
+    HBox suggestionsDisplayBox = super.find(FeedFormFrontViewConfiguration.SUGGESTIONS_DISPLAY_BOX);
+    suggestionsDisplayBox.getChildren().add(suggestionButton);
   }
 
   @Override
