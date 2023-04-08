@@ -1,6 +1,7 @@
 package ru.itzstonlex.desktop.chatbotmessenger.api.form;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,6 +19,7 @@ import ru.itzstonlex.desktop.chatbotmessenger.api.form.function.FormFunctionRele
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecaseKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.view.FormFrontView;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.scanner.ResourceClasspathScannerResponse;
 import ru.itzstonlex.desktop.chatbotmessenger.api.utility.RuntimeBlocker;
 
 @ToString(onlyExplicitlyIncluded = true)
@@ -101,24 +103,13 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
   }
 
   private void initializeFunctions(FormFunctionReleaser<AbstractSceneForm<?>> formFunctionReleaser) throws IllegalAccessException {
+    ResourceClasspathScannerResponse response = new ResourceClasspathScannerResponse(null,
+        Collections.singletonList(formFunctionReleaser.getClass()));
+
     formFunctionReleaser.setForm(this);
 
-    Class<?> cls = formFunctionReleaser.getClass();
-    for (Method declaredMethod : cls.getDeclaredMethods()) {
-      FormFunction annotation = declaredMethod.getDeclaredAnnotation(FormFunction.class);
-
-      if (annotation != null) {
-        FormFunctionProcessor processAction = (values) -> {
-          try {
-            declaredMethod.invoke(formFunctionReleaser, values);
-          }
-          catch (Exception exception) {
-            exception.printStackTrace();
-          }
-        };
-
-        functionProcessorsMap.put(annotation.key(), processAction);
-      }
+    for (Method method : response.getAccessedMethodsByAnnotation(FormFunction.class)) {
+      functionProcessorsMap.put(method.getDeclaredAnnotation(FormFunction.class).key(), (values) -> method.invoke(formFunctionReleaser, values));
     }
   }
 
@@ -131,7 +122,14 @@ public abstract class AbstractSceneForm<V extends FormFrontView<?>> {
     }
 
     System.out.println("[ComponentController] Call function \"" + name + "\" for " + currentClassName);
-    Platform.runLater(() -> processAction.process(values));
+    Platform.runLater(() -> {
+      try {
+        processAction.process(values);
+      }
+      catch (Exception exception) {
+        exception.printStackTrace();
+      }
+    });
   }
 
 }

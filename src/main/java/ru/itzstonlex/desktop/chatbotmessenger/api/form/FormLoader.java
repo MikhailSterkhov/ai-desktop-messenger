@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -23,17 +24,21 @@ import net.nodeson.NodesonUnsafe;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.NodeObserver;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.NodeObserverConfigurable;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
+import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserverLoader;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecase;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.usecase.FormUsecaseKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.api.resource.Resource;
-import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceClasspathScanner;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.scanner.ResourceClasspathScanner;
 import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceFactory;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.scanner.ResourceClasspathScannerResponse;
 import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceDirection;
 import ru.itzstonlex.desktop.chatbotmessenger.api.resource.type.ResourceGroup;
 import ru.itzstonlex.desktop.chatbotmessenger.api.utility.RuntimeBlocker;
 
 @RequiredArgsConstructor
 public final class FormLoader {
+
+  private final ObserverLoader observerLoader = new ObserverLoader();
 
   private final RuntimeBlocker formsInitBlocker = new RuntimeBlocker();
   private final RuntimeBlocker redirectBlocker = new RuntimeBlocker();
@@ -70,7 +75,7 @@ public final class FormLoader {
       abstractSceneForm.setJavafxNode(parent);
 
       abstractSceneForm.initializeParameters();
-      injectAllObservers(abstractSceneForm);
+      observerLoader.injectAllObservers(abstractSceneForm);
 
       return abstractSceneForm;
     }
@@ -152,78 +157,5 @@ public final class FormLoader {
   @SuppressWarnings("unchecked")
   public <T extends AbstractSceneForm<?>> T getCachedForm(@NonNull ApplicationFormKeys.Key key) {
     return ((T) applicationFormsMap.get(key));
-  }
-
-  @SneakyThrows
-  private void registerObservers(AbstractSceneForm<?> form, Collection<?> injectInstances, Set<NodeObserver<AbstractSceneForm<?>>> observers) {
-    for (Object instanceObj : injectInstances) {
-      Class<?> controllerCls = instanceObj.getClass();
-
-      for (Field field : controllerCls.getDeclaredFields()) {
-        ObserveBy annotation = field.getDeclaredAnnotation(ObserveBy.class);
-        if (annotation == null || !Node.class.isAssignableFrom(field.getType()))
-          continue;
-
-        Class<? extends NodeObserver<?>>[] observersArray = annotation.value();
-        List<Class<? extends NodeObserver<?>>> observersList = Arrays.asList(observersArray);
-
-        field.setAccessible(true);
-
-        Node node = ((Node) field.get(instanceObj));
-        observers.stream()
-            .filter(observer -> observersList.contains(observer.getClass()))
-            .findFirst()
-            .ifPresent(
-                (nodeObserver) -> {
-                  nodeObserver.setForm(form);
-                  nodeObserver.setComponent(node);
-
-                  if (nodeObserver instanceof NodeObserverConfigurable)
-                    ((NodeObserverConfigurable) nodeObserver).configure();
-
-                  field.setAccessible(false);
-                  nodeObserver.beginObserving();
-                });
-      }
-    }
-  }
-
-  public void injectAllObservers(AbstractSceneForm<?> form) {
-    Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractSceneForm<?>>>> observersMap = loadObservers();
-    Set<NodeObserver<AbstractSceneForm<?>>> observerSet = observersMap.get(form.key);
-
-    registerObservers(form, form.getComponentControllers(), observerSet);
-
-    registerObservers(form, Collections.singletonList(form), observerSet);
-    registerObservers(form, Collections.singletonList(form.getView()), observerSet);
-  }
-
-  @SuppressWarnings("unchecked")
-  @SneakyThrows
-  private Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractSceneForm<?>>>> loadObservers() {
-    Map<ApplicationFormKeys.Key, Set<NodeObserver<AbstractSceneForm<?>>>> map = new HashMap<>();
-
-    ResourceClasspathScanner resourceClasspathScanner = new ResourceClasspathScanner();
-    Set<Class<?>> allClassesUsingClassLoader = resourceClasspathScanner.findAllClassesUsingClassLoader(
-        "ru.itzstonlex.desktop.chatbotmessenger.observer"
-    );
-
-    for (Class<?> cls : allClassesUsingClassLoader) {
-      if (NodeObserver.class.isAssignableFrom(cls)) {
-
-        NodeObserver<AbstractSceneForm<?>> observer = (NodeObserver<AbstractSceneForm<?>>) NodesonUnsafe.allocate(cls);
-        Set<NodeObserver<AbstractSceneForm<?>>> observersCacheSet = map.get(observer.getApplicationFormKey());
-
-        if (observersCacheSet == null) {
-          observersCacheSet = new HashSet<>();
-        }
-
-        observersCacheSet.add(observer);
-
-        map.put(observer.getApplicationFormKey(), observersCacheSet);
-      }
-    }
-
-    return map;
   }
 }
