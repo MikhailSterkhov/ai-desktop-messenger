@@ -1,16 +1,29 @@
 package ru.itzstonlex.desktop.chatbotmessenger.api.google;
 
-import com.google.cloud.speech.v1.SpeechClient;
 import lombok.experimental.UtilityClass;
-import ru.itzstonlex.desktop.chatbotmessenger.api.google.speech.GoogleSpeechApi;
-import ru.itzstonlex.desktop.chatbotmessenger.api.google.speech.GoogleSpeechEvent;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize.GoogleRecognize;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize.GoogleRecognizeApi;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.speak.GoogleSpeak;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.speak.GoogleSpeakApi;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.translation.GoogleTranslation;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.translation.GoogleTranslationApi;
 
 @UtilityClass
-public class GoogleApiFactory {
+public class GoogleApiCloud {
 
-  private final GoogleSpeechApi GOOGLE_SPEECH_API = new GoogleSpeechApi();
+  private final GoogleSpeak GOOGLE_SPEAK_API = new GoogleSpeakApi();
+  private final GoogleRecognize GOOGLE_RECOGNIZE_API = new GoogleRecognizeApi();
+  private final GoogleTranslation GOOGLE_TRANSLATION_API = new GoogleTranslationApi();
 
-  public GoogleApi<SpeechClient, GoogleSpeechEvent> getSpeechApi() {
-    return GOOGLE_SPEECH_API;
+  public GoogleSpeak getSpeakApi() {
+    return GOOGLE_SPEAK_API;
+  }
+
+  public GoogleRecognize getRecognizeApi() {
+    return GOOGLE_RECOGNIZE_API;
+  }
+
+  public GoogleTranslation getTranslationApi() {
+    return GOOGLE_TRANSLATION_API;
   }
 }

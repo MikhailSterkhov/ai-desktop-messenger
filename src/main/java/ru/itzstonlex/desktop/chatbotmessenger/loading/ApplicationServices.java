@@ -6,8 +6,9 @@ import javazoom.jl.decoder.JavaLayerException;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.FormLoader;
 import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApi;
-import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApiFactory;
-import ru.itzstonlex.desktop.chatbotmessenger.api.google.speech.GoogleSpeechEvent;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApiCloud;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize.GoogleRecognize;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize.GoogleRecognizeEvent;
 import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceFactory;
 import ru.itzstonlex.desktop.chatbotmessenger.api.sound.SoundPlayer;
 
@@ -75,13 +76,13 @@ public enum ApplicationServices {
   GOOGLE {
     @Override
     public void load(AsyncServicesLoader loader) {
-      GoogleApi<SpeechClient, GoogleSpeechEvent> googleSpeechApi = GoogleApiFactory.getSpeechApi();
+      GoogleRecognize recognizeApi = GoogleApiCloud.getRecognizeApi();
 
       try {
-        googleSpeechApi.initGoogleCredentials(ResourceFactory.openClasspath("/credentials.json"));
-        googleSpeechApi.initGoogleService(googleSpeechApi.getCredentials());
+        recognizeApi.initGoogleCredentials(ResourceFactory.openClasspath("/credentials.json"));
+        recognizeApi.initGoogleService(recognizeApi.getCredentials());
 
-        googleSpeechApi.enableServiceProcess(googleSpeechApi.getApi());
+        recognizeApi.recognizeParallel();
       }
       catch (Exception exception) {
         loader.getFormManipulator().shorError(exception);

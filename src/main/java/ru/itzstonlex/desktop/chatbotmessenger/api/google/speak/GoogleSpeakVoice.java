@@ -9,15 +9,12 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public enum GoogleSpeakConfigType {
+public enum GoogleSpeakVoice {
 
-  MALE(SsmlVoiceGender.MALE,1, 1),
-  FEMALE(SsmlVoiceGender.FEMALE, 1, 1),
-  NEUTRAL(SsmlVoiceGender.NEUTRAL, 1, 1),
+  MALE(SsmlVoiceGender.MALE),
+  FEMALE(SsmlVoiceGender.FEMALE),
+  NEUTRAL(SsmlVoiceGender.NEUTRAL),
   ;
 
   SsmlVoiceGender gender;
-
-  double rate;
-  double pitch;
 }

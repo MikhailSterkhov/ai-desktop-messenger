@@ -1,7 +1,11 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller;
 
+import com.theokanning.openai.OpenAiService;
+import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.completion.CompletionResult;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -56,6 +60,8 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
     return text.replace("<br>", "\n");
   }
 
+  private final OpenAiService chatGPT = new OpenAiService("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", 5);
+
   public void onMessageReceive(@NonNull String receivedMessage) {
     ChatBotHeaderController chatBotHeaderController = getForm().getController(ChatBotHeaderController.class);
 
@@ -64,9 +70,20 @@ public final class BothMessagesReceiveController extends AbstractComponentContro
     chatBotHeaderController.setTypingStatus(TypingStatus.TYPING);
 
     // send answer
-    ChatBotRequest chatBotRequest = new ChatBotRequest(receivedMessage);
-    chatBotAssistant.requestBestSuggestion(chatBotRequest)
-        .thenAccept(response -> fireFunction(FeedFormFunctionReleaser.REPLY, response.getMessageText()));
+    CompletableFuture.supplyAsync(() -> chatGPT.createCompletion(CompletionRequest.builder()
+            .model("text-davinci-003")
+            .prompt(receivedMessage)
+            .temperature(0.9)
+            .maxTokens(500)
+            .topP(1.0)
+            .frequencyPenalty(0.0)
+            .presencePenalty(0.6)
+            .build()))
+        .whenCompleteAsync((completionResult, error) -> fireFunction(FeedFormFunctionReleaser.REPLY,
+            completionResult.getChoices().get(0).getText()));
+    // ChatBotRequest chatBotRequest = new ChatBotRequest(receivedMessage);
+    // chatBotAssistant.requestBestSuggestion(chatBotRequest)
+    //     .thenAccept(response -> fireFunction(FeedFormFunctionReleaser.REPLY, response.getMessageText()));
 
     // hide suggestions.
     FooterSuggestionsController footerSuggestionsController = getForm().getController(FooterSuggestionsController.class);

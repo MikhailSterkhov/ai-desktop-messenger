@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
+import javazoom.jl.player.advanced.AdvancedPlayer;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,11 @@ public class SoundPlayer {
   class SoundInputStreamWrapper {
 
     private final ByteArrayInputStream inputStream;
-    private Player player;
+    private AdvancedPlayer player;
 
     void updatePlayer() throws JavaLayerException {
       inputStream.reset();
-      player = new Player(inputStream);
+      player = new AdvancedPlayer(inputStream);
     }
   }
 
@@ -81,7 +82,7 @@ public class SoundPlayer {
 
       try {
         SoundInputStreamWrapper soundInputStream = CACHED_SOUND_PLAYERS_MAP.get(formattedSoundName);
-        Player player = soundInputStream.getPlayer();
+        AdvancedPlayer player = soundInputStream.getPlayer();
 
         if (player != null) {
 
@@ -95,6 +96,18 @@ public class SoundPlayer {
         exception.printStackTrace();
       }
     });
+  }
+
+  public void playInputStreamSynchronized(@NonNull InputStream inputStream) {
+    try {
+      AdvancedPlayer player = new AdvancedPlayer(inputStream);
+
+      player.play();
+      player.close();
+
+    } catch (Exception exception) {
+      exception.printStackTrace();
+    }
   }
 
   public String formatSoundName(@NonNull SoundGroup group, @NonNull Sound sound) {

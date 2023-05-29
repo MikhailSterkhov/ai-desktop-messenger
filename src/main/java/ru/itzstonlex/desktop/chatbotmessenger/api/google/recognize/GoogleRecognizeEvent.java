@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.chatbotmessenger.api.google.speech;
+package ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,7 @@ import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApiEvent;
 
 @Getter
 @RequiredArgsConstructor
-public class GoogleSpeechEvent implements GoogleApiEvent {
+public class GoogleRecognizeEvent implements GoogleApiEvent {
 
   private final boolean isFinally;
 

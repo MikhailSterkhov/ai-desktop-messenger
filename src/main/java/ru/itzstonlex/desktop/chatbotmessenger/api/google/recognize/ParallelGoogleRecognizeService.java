@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.chatbotmessenger.api.google.speech;
+package ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize;
 
 import com.google.api.gax.rpc.ClientStream;
 import com.google.api.gax.rpc.StreamController;
@@ -11,7 +11,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public final class ParallelGoogleSpeechService {
+public final class ParallelGoogleRecognizeService {
 
   private static final int STREAMING_LIMIT = 290000; // ~5 minutes
 
@@ -24,9 +24,9 @@ public final class ParallelGoogleSpeechService {
   private List<ByteString> audioInput = new ArrayList<>();
   private List<ByteString> lastAudioInput = new ArrayList<>();
 
-  private final GoogleSpeechApi googleSpeechApi;
+  private final GoogleRecognizeApi googleSpeechApi;
 
-  private final GoogleSpeechResponseObserver responseObserver;
+  private final GoogleRecognizeResponseObserver responseObserver;
   private final StreamingRecognitionConfig streamingRecognitionConfig;
 
   public void executeParallelSpeech(

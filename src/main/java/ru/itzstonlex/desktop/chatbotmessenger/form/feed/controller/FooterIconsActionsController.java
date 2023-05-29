@@ -1,6 +1,5 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller;
 
-import com.google.cloud.speech.v1.SpeechClient;
 import javafx.application.Platform;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.TextField;
@@ -8,9 +7,8 @@ import javafx.scene.image.ImageView;
 import lombok.SneakyThrows;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
-import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApi;
-import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApiFactory;
-import ru.itzstonlex.desktop.chatbotmessenger.api.google.speech.GoogleSpeechEvent;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApiCloud;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize.GoogleRecognize;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontView;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontViewConfiguration;
@@ -75,11 +73,11 @@ public final class FooterIconsActionsController extends AbstractComponentControl
 
     view.switchInputMessageFieldPrompt(enabled);
 
-    GoogleApi<SpeechClient, GoogleSpeechEvent> speechApi = GoogleApiFactory.getSpeechApi();
+    GoogleRecognize googleRecognize = GoogleApiCloud.getRecognizeApi();
 
     if (enabled) {
-      speechApi.resumeServiceProcess(speechApi.getApi());
-      speechApi.addListener((event, throwable) -> {
+      googleRecognize.resume();
+      googleRecognize.addListener((event, throwable) -> {
 
         if (throwable != null) {
           throwable.printStackTrace();
@@ -105,8 +103,8 @@ public final class FooterIconsActionsController extends AbstractComponentControl
       });
     }
     else {
-      speechApi.pauseServiceProcess(speechApi.getApi());
-      speechApi.clearListeners();
+      googleRecognize.pause();
+      googleRecognize.clearListeners();
     }
   }
 }

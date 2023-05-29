@@ -1,10 +1,12 @@
-package ru.itzstonlex.desktop.chatbotmessenger.api.google.speech;
+package ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize;
 
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.api.gax.rpc.ClientStream;
 import com.google.api.gax.rpc.StreamController;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.speech.v1.RecognitionConfig;
+import com.google.cloud.speech.v1.RecognitionConfig.AudioEncoding;
+import com.google.cloud.speech.v1.RecognitionConfig.Builder;
 import com.google.cloud.speech.v1.SpeechClient;
 import com.google.cloud.speech.v1.SpeechSettings;
 import com.google.cloud.speech.v1.StreamingRecognitionConfig;
@@ -22,15 +24,16 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import ru.itzstonlex.desktop.chatbotmessenger.api.google.AbstractGoogleApi;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.translation.GoogleLanguage;
 
-public final class GoogleSpeechApi extends AbstractGoogleApi<SpeechClient, GoogleSpeechEvent>
-    implements GoogleSpeech {
+public final class GoogleRecognizeApi extends AbstractGoogleApi<SpeechClient, GoogleRecognizeEvent>
+    implements GoogleRecognize {
 
   private final ExecutorService executor = Executors.newCachedThreadPool();
   private final AtomicBoolean serviceStateAtomicBoolean = new AtomicBoolean(false);
 
   private MicrophoneLineBuffer microphoneLineBuffer;
-  private ParallelGoogleSpeechService parallelGoogleSpeechService;
+  private ParallelGoogleRecognizeService parallelGoogleRecognizeService;
   private Future<?> activeBufferTask;
 
   @Setter(AccessLevel.PACKAGE)
@@ -38,6 +41,10 @@ public final class GoogleSpeechApi extends AbstractGoogleApi<SpeechClient, Googl
 
   @Getter
   private SpeechClient api;
+
+  private StreamingRecognitionConfig streamingRecognitionConfig;
+  private GoogleRecognizeResponseObserver responseObserver;
+  private ClientStream<StreamingRecognizeRequest> clientStream;
 
   private void initAudioDevices() throws Exception {
     AudioFormat audioFormat = new AudioFormat(16000, 16, 1, true, false);
@@ -61,27 +68,27 @@ public final class GoogleSpeechApi extends AbstractGoogleApi<SpeechClient, Googl
 
   @Override
   public void initGoogleService(@NonNull GoogleCredentials credentials) throws Exception {
-    this.api = SpeechClient.create(SpeechSettings.newBuilder()
-        .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
-        .build()
-    );
+    this.api = SpeechClient.create(
+        SpeechSettings.newBuilder()
+            .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
+            .build());
   }
 
   private RecognitionConfig configureRecognitionConfig() {
-    return RecognitionConfig.newBuilder()
-        .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
-
-        .setLanguageCode("ru-RU")
-
-        .addAlternativeLanguageCodes("en-US")
-        .addAlternativeLanguageCodes("es-ES")
-        .addAlternativeLanguageCodes("es-US")
-        .addAlternativeLanguageCodes("de-DE")
-        .addAlternativeLanguageCodes("uk-UA")
-
+    Builder recognitionConfig = RecognitionConfig.newBuilder()
         .setSampleRateHertz(16000)
         .setEnableAutomaticPunctuation(true)
-        .build();
+
+        .setEncoding(AudioEncoding.LINEAR16)
+        .setLanguageCode(GoogleLanguage.RUSSIAN.getCode());
+
+    GoogleLanguage[] languages = GoogleLanguage.values();
+
+    for (GoogleLanguage language : languages)
+      if (language != GoogleLanguage.RUSSIAN && language != GoogleLanguage.UNKNOWN)
+        recognitionConfig.addAlternativeLanguageCodes(language.getCode());
+
+    return recognitionConfig.build();
   }
 
   private StreamingRecognitionConfig configureStreamingRecognitionConfig(RecognitionConfig recognitionConfig) {
@@ -92,20 +99,20 @@ public final class GoogleSpeechApi extends AbstractGoogleApi<SpeechClient, Googl
   }
 
   @Override
-  public void enableServiceProcess(@NonNull SpeechClient api) throws Exception {
+  public void recognize() throws Exception {
     if (activeBufferTask != null)
       throw new IllegalAccessException("Service already enabled!");
 
     if (microphoneLineBuffer == null)
       initAudioDevices();
 
-    GoogleSpeechResponseObserver responseObserver = new GoogleSpeechResponseObserver(this);
-    ClientStream<StreamingRecognizeRequest> clientStream = api.streamingRecognizeCallable()
+    responseObserver = new GoogleRecognizeResponseObserver(this);
+    clientStream = api.streamingRecognizeCallable()
         .splitCall(responseObserver);
 
     RecognitionConfig recognitionConfig = configureRecognitionConfig();
 
-    StreamingRecognitionConfig streamingRecognitionConfig =
+    streamingRecognitionConfig =
         configureStreamingRecognitionConfig(recognitionConfig);
 
     StreamingRecognizeRequest request =
@@ -115,13 +122,17 @@ public final class GoogleSpeechApi extends AbstractGoogleApi<SpeechClient, Googl
 
     clientStream.send(request);
     openAudioStreaming();
+  }
 
+  @Override
+  public void recognizeParallel() throws Exception {
+    recognize();
     executor.execute(() -> {
 
       try {
-        parallelGoogleSpeechService = new ParallelGoogleSpeechService(this, responseObserver,
+        parallelGoogleRecognizeService = new ParallelGoogleRecognizeService(this, responseObserver,
             streamingRecognitionConfig);
-        parallelGoogleSpeechService.executeParallelSpeech(clientStream, streamController, microphoneLineBuffer);
+        parallelGoogleRecognizeService.executeParallelSpeech(clientStream, streamController, microphoneLineBuffer);
       }
       catch (Exception exception) {
         exception.printStackTrace();
@@ -140,23 +151,23 @@ public final class GoogleSpeechApi extends AbstractGoogleApi<SpeechClient, Googl
   }
 
   @Override
-  public void resumeServiceProcess(@NonNull SpeechClient api) throws Exception {
+  public void resume() throws Exception {
     switchServiceState(true);
   }
 
   @Override
-  public void pauseServiceProcess(@NonNull SpeechClient api) throws Exception {
+  public void pause() throws Exception {
     switchServiceState(false);
   }
 
   @Override
-  public void shutdownServiceProcess(@NonNull SpeechClient api) throws Exception {
+  public void shutdown() throws Exception {
     clearListeners();
 
-    pauseServiceProcess(api);
+    pause();
 
     activeBufferTask = null;
-    parallelGoogleSpeechService = null;
+    parallelGoogleRecognizeService = null;
 
     api.close();
     api.shutdownNow();

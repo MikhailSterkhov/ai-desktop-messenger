@@ -1,4 +1,4 @@
-package ru.itzstonlex.desktop.chatbotmessenger.api.google.speech;
+package ru.itzstonlex.desktop.chatbotmessenger.api.google.recognize;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -19,8 +19,8 @@ public final class MicrophoneLineBuffer implements Runnable {
 
   private void share(byte[] data) {
     boolean isLineOpen = targetDataLine.isOpen();
-    int numBytesRead = targetDataLine.read(data, 0, data.length);
 
+    int numBytesRead = targetDataLine.read(data, 0, data.length);
     if ((numBytesRead <= 0) && isLineOpen)
       return;
 
