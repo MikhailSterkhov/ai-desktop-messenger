@@ -1,9 +1,14 @@
 package ru.itzstonlex.desktop.chatbotmessenger.loading;
 
+import com.google.cloud.speech.v1.SpeechClient;
 import java.io.IOException;
 import javazoom.jl.decoder.JavaLayerException;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.ApplicationFormKeys;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.FormLoader;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApi;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApiFactory;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.speech.GoogleSpeechEvent;
+import ru.itzstonlex.desktop.chatbotmessenger.api.resource.ResourceFactory;
 import ru.itzstonlex.desktop.chatbotmessenger.api.sound.SoundPlayer;
 
 public enum ApplicationServices {
@@ -67,11 +72,20 @@ public enum ApplicationServices {
     }
   },
 
-  GENERAL {
+  GOOGLE {
     @Override
     public void load(AsyncServicesLoader loader) {
-      loader.debug("Application parts was successful loaded");
-      loader.debug("Redirection to feedback page...");
+      GoogleApi<SpeechClient, GoogleSpeechEvent> googleSpeechApi = GoogleApiFactory.getSpeechApi();
+
+      try {
+        googleSpeechApi.initGoogleCredentials(ResourceFactory.openClasspath("/credentials.json"));
+        googleSpeechApi.initGoogleService(googleSpeechApi.getCredentials());
+
+        googleSpeechApi.enableServiceProcess(googleSpeechApi.getApi());
+      }
+      catch (Exception exception) {
+        loader.getFormManipulator().shorError(exception);
+      }
     }
   },
   ;

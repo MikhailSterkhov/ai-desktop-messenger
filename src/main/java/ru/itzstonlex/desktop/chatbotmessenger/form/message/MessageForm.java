@@ -51,7 +51,7 @@ public final class MessageForm extends AbstractSceneForm<MessageFormFrontView> {
     HBox horizontalMessageBox = getView().find(MessageFormFromViewConfiguration.MESSAGE_FULL_HORIZONTAL_BOX);
     horizontalMessageBox.setTranslateX(25);
 
-    senderType.updateAvatar(getView().find(MessageFormFromViewConfiguration.MESSAGE_SENDER_AVATAR));
+    senderType.updateAvatarImageView(getView().find(MessageFormFromViewConfiguration.MESSAGE_SENDER_AVATAR));
     //senderType.updateMessageLabelPosition(messageLabel);
 
     senderType.updateMessageBoxPosition(getView().find(MessageFormFromViewConfiguration.MESSAGE_VERTICAL_BOX));

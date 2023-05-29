@@ -38,6 +38,8 @@ public abstract class AbstractFeedFooterIconClickObserver extends AbstractMouseC
   public void observe(MouseEvent event) {
     boolean isEnabled = iconView.getOpacity() == ENABLED_OPACITY;
 
+    log(MESSAGE_OBSERVE_PROCESS + ", state: " + (isEnabled ? "'enabled' -> 'disabled'" : "'disabled' -> 'enabled'"));
+
     iconView.setOpacity(isEnabled ? DISABLED_OPACITY : ENABLED_OPACITY);
     onStateChanged(controller, !isEnabled);
   }

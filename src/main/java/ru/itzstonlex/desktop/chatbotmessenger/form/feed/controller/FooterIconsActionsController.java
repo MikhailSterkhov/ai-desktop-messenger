@@ -1,10 +1,16 @@
 package ru.itzstonlex.desktop.chatbotmessenger.form.feed.controller;
 
+import com.google.cloud.speech.v1.SpeechClient;
+import javafx.application.Platform;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import lombok.SneakyThrows;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.controller.AbstractComponentController;
 import ru.itzstonlex.desktop.chatbotmessenger.api.form.observer.ObserveBy;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApi;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.GoogleApiFactory;
+import ru.itzstonlex.desktop.chatbotmessenger.api.google.speech.GoogleSpeechEvent;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.FeedForm;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontView;
 import ru.itzstonlex.desktop.chatbotmessenger.form.feed.view.FeedFormFrontViewConfiguration;
@@ -44,22 +50,63 @@ public final class FooterIconsActionsController extends AbstractComponentControl
 
   public void onDialogSidesStateChanged(boolean enabled) {
     FeedForm form = getForm();
+    FeedFormFrontView view = form.getView();
 
     BothMessagesReceiveController messagesReceiveController = form.getController(BothMessagesReceiveController.class);
-    form.getView().reverseCachedMessagesOrientation(messagesReceiveController.getMessageNodesList());
+    view.reverseCachedMessagesOrientation(messagesReceiveController.getMessageNodesList());
+
+    // reverse next dialog messages orientation.
+    NodeOrientation rightToLeft = NodeOrientation.RIGHT_TO_LEFT;
+    NodeOrientation leftToRight = NodeOrientation.LEFT_TO_RIGHT;
 
     if (enabled) {
-      MessageFormFunctionReleaser.CHAT_BOT_ORIENTATION = NodeOrientation.RIGHT_TO_LEFT;
-      MessageFormFunctionReleaser.USER_ORIENTATION = NodeOrientation.LEFT_TO_RIGHT;
+      MessageFormFunctionReleaser.CHAT_BOT_ORIENTATION = rightToLeft;
+      MessageFormFunctionReleaser.USER_ORIENTATION = leftToRight;
     } else {
-      MessageFormFunctionReleaser.CHAT_BOT_ORIENTATION = NodeOrientation.LEFT_TO_RIGHT;
-      MessageFormFunctionReleaser.USER_ORIENTATION = NodeOrientation.RIGHT_TO_LEFT;
+      MessageFormFunctionReleaser.CHAT_BOT_ORIENTATION = leftToRight;
+      MessageFormFunctionReleaser.USER_ORIENTATION = rightToLeft;
     }
   }
 
+  @SneakyThrows
   public void onMicrophoneStateChanged(boolean enabled) {
-    getForm().getView().switchInputMessageFieldPrompt(enabled);
+    FeedForm form = getForm();
+    FeedFormFrontView view = form.getView();
 
-    // todo - 08.04.2023 - change state of auto-recognize
+    view.switchInputMessageFieldPrompt(enabled);
+
+    GoogleApi<SpeechClient, GoogleSpeechEvent> speechApi = GoogleApiFactory.getSpeechApi();
+
+    if (enabled) {
+      speechApi.resumeServiceProcess(speechApi.getApi());
+      speechApi.addListener((event, throwable) -> {
+
+        if (throwable != null) {
+          throwable.printStackTrace();
+          return;
+        }
+
+        String transcript = event.getTranscript();
+
+        TextField inputMessageField = view.find(FeedFormFrontViewConfiguration.INPUT_MESSAGE_FIELD);
+        Platform.runLater(() -> inputMessageField.setText(transcript));
+
+        if (event.isFinally()) {
+          Thread.sleep(1000);
+
+          Platform.runLater(() -> {
+
+            inputMessageField.clear();
+
+            BothMessagesReceiveController controller = form.getController(BothMessagesReceiveController.class);
+            controller.onMessageReceive(transcript);
+          });
+        }
+      });
+    }
+    else {
+      speechApi.pauseServiceProcess(speechApi.getApi());
+      speechApi.clearListeners();
+    }
   }
 }
